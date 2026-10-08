@@ -1,0 +1,17 @@
+name: SuperEnchantments
+version: ${project.version}
+main: me.nik.superenchantments.SuperEnchantments
+api-version: '1.17'
+description: Lore-based custom enchantments.
+commands:
+  superenchantments:
+    description: Manage SuperEnchantments.
+    aliases: [se, senchants]
+    usage: /<command> <list|enchant|remove|book|reload>
+permissions:
+  superenchantments.admin:
+    description: Use the /superenchantments command.
+    default: op
+  superenchantments.use:
+    description: Allows custom enchants to trigger for the player.
+    default: true

@@ -1,0 +1,79 @@
+# ============================================================
+#  SuperEnchantments
+#  Enchants are lore based: the lore line ("Blast") IS the enchant.
+#  Enchants have no levels, they are either on an item or not.
+#  Edit this file, then run /se reload.
+#  Colors use & codes.
+# ============================================================
+
+# Global settings ------------------------------------------------
+books:
+  # {name} = enchant display name
+  name-format: "&b{name} Book"
+
+anvil:
+  enabled: true              # allow applying enchant books to tools in an anvil
+  cost: 5                    # XP level cost per enchant applied
+
+# Enchants -------------------------------------------------------
+# To add a new enchant, create a class that extends CustomEnchant,
+# register it in SuperEnchantments#onEnable, and give it a section here.
+enchants:
+  blast:
+    enabled: true
+    display-name: "Blast"    # also what the lore line is matched against
+    lore-color: "&a"
+    applies-to: [PICKAXE]   # material suffixes, or ALL
+    radius: 3                # 1 = 3x3, 2 = 5x5, 3 = 7x7, ...
+
+    sneak-disables: true     # holding sneak turns Blast off
+    disabled-worlds: []      # e.g. [world_nether, creative_plots]
+    disabled-gamemodes: [CREATIVE, SPECTATOR]
+
+    drop-items: true         # false = extra blocks just vanish
+    drop-xp: true            # drop experience from extra blocks
+    skip-containers: true    # never break chests, furnaces, hoppers, etc.
+    blocked-blocks:          # never broken by Blast
+      - BEDROCK
+      - BARRIER
+      - SPAWNER
+      - END_PORTAL
+      - END_PORTAL_FRAME
+      - COMMAND_BLOCK
+      - CHAIN_COMMAND_BLOCK
+      - REPEATING_COMMAND_BLOCK
+      - STRUCTURE_BLOCK
+      - JIGSAW
+
+    tool-damage:
+      enabled: true          # extra blocks wear the tool down
+      per-block: 1           # durability lost per extra block
+      respect-unbreaking: true
+      # Blast stops when the tool is nearly broken so the vanilla break
+      # happens on the block you actually mined.
+
+    effects:
+      particle: "CLOUD"      # NONE to disable (names depend on server version)
+      particle-count: 5
+      sound: "entity.generic.explode"   # NONE to disable (namespaced sound key)
+      sound-volume: 0.4
+      sound-pitch: 1.2
+
+# Messages -------------------------------------------------------
+messages:
+  prefix: "&8[&bSuperEnchantments&8] &r"
+  no-permission: "&cYou don't have permission."
+  player-only: "&cThat must be run by a player."
+  usage: "&7Usage: &f/se <list|enchant|remove|book|reload>"
+  unknown-enchant: "&cUnknown enchant: &f{enchant}"
+  enchant-disabled: "&c{enchant} is disabled in the config."
+  hold-item: "&cHold an item first."
+  cannot-apply: "&c{enchant} can't be applied to that item."
+  applied: "&aApplied &f{enchant} &ato your item."
+  removed: "&aRemoved &f{enchant} &afrom your item."
+  not-present: "&cThat item doesn't have {enchant}."
+  book-given: "&aGave &f{player} &aa &f{enchant} &abook."
+  player-not-found: "&cPlayer not found: &f{player}"
+  reloaded: "&aConfig reloaded."
+  list-header: "&bRegistered enchants:"
+  list-entry: "&7- &f{enchant} &7({state}&7)"

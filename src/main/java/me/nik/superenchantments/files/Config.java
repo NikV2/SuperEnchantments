@@ -70,7 +70,8 @@ public class Config {
     public enum Setting {
 
         BOOKS("books", "", "Enchant Book Settings"),
-        BOOKS_NAME_FORMAT("books.name-format", "&b{name} Book", "The display name of the enchant books", "{name} = the enchant display name"),
+        BOOKS_NAME_FORMAT("books.name-format", "&b%name% Book", "The display name of the enchant books", "%name% = the enchant display name"),
+        BOOKS_MATERIAL("books.material", "BOOK", "The material to use for custom enchantment books"),
 
         ANVIL("anvil", "", "Anvil Settings"),
         ANVIL_ENABLED("anvil.enabled", true, "Should players be able to apply enchant books to tools in an anvil?"),

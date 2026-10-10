@@ -36,13 +36,13 @@ public class BlastEnchant extends CustomEnchant {
         super(plugin, "blast", "Blast", "&a", "PICKAXE");
 
         addOption("radius", 3, "How many extra 3x3 layers are mined forward", "The width and height never grow, only the depth does");
-        addOption("sneak-disables", true, "Holding sneak turns Blast off");
-        addOption("disabled-worlds", new ArrayList<String>(), "Blast does not work in these worlds", "Example: [world_nether, creative]");
-        addOption("disabled-gamemodes", Arrays.asList("CREATIVE", "SPECTATOR"), "Blast does not work in these gamemodes");
-        addOption("drop-items", true, "false = the extra blocks just vanish");
-        addOption("drop-xp", true, "Drop experience from the extra blocks");
-        addOption("skip-containers", true, "Never break chests, furnaces, hoppers and so on");
-        addOption("blocked-blocks", Arrays.asList(
+        addOption("sneak_disables", true, "Holding sneak turns Blast off");
+        addOption("disabled_worlds", new ArrayList<String>(), "Blast does not work in these worlds", "Example: [world_nether, creative]");
+        addOption("disabled_gamemodes", Arrays.asList("CREATIVE", "SPECTATOR"), "Blast does not work in these gamemodes");
+        addOption("drop_items", true, "false = the extra blocks just vanish");
+        addOption("drop_xp", true, "Drop experience from the extra blocks");
+        addOption("skip_containers", true, "Never break chests, furnaces, hoppers and so on");
+        addOption("blocked_blocks", Arrays.asList(
                 "BEDROCK",
                 "BARRIER",
                 "SPAWNER",
@@ -54,14 +54,14 @@ public class BlastEnchant extends CustomEnchant {
                 "STRUCTURE_BLOCK",
                 "JIGSAW"
         ), "Blocks that Blast never breaks");
-        addOption("tool-damage.enabled", true, "Should the extra blocks wear the tool down?", "Blast stops when the tool is nearly broken so the vanilla break happens on the block you actually mined");
-        addOption("tool-damage.per-block", 1, "Durability lost per extra block");
-        addOption("tool-damage.respect-unbreaking", true, "Should the Unbreaking enchant reduce the damage?");
+        addOption("tool_damage.enabled", true, "Should the extra blocks wear the tool down?", "Blast stops when the tool is nearly broken so the vanilla break happens on the block you actually mined");
+        addOption("tool_damage.per-block", 1, "Durability lost per extra block");
+        addOption("tool_damage.respect-unbreaking", true, "Should the Unbreaking enchant reduce the damage?");
         addOption("effects.particle", "CLOUD", "NONE to disable", "Particle names depend on the server version");
-        addOption("effects.particle-count", 5, "The amount of particles");
+        addOption("effects.particle_count", 5, "The amount of particles");
         addOption("effects.sound", "entity.generic.explode", "NONE to disable", "Use the namespaced sound key");
-        addOption("effects.sound-volume", 0.4, "The volume of the sound");
-        addOption("effects.sound-pitch", 1.2, "The pitch of the sound");
+        addOption("effects.sound_volume", 0.4, "The volume of the sound");
+        addOption("effects.sound_pitch", 1.2, "The pitch of the sound");
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)

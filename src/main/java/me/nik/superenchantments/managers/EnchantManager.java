@@ -147,11 +147,20 @@ public class EnchantManager implements AbstractManager {
 
     public ItemStack createBook(CustomEnchant enchant) {
 
-        ItemStack book = apply(new ItemStack(Material.ENCHANTED_BOOK), enchant);
+        Material bookMaterial;
+
+        try {
+            bookMaterial = Material.valueOf(Config.Setting.BOOKS_MATERIAL.getString());
+        } catch (Throwable t) {
+            ChatUtils.log("Invalid book material");
+            return null;
+        }
+
+        ItemStack book = apply(new ItemStack(bookMaterial), enchant);
 
         ItemMeta meta = book.getItemMeta();
 
-        meta.setDisplayName(ChatUtils.format(Config.Setting.BOOKS_NAME_FORMAT.getString().replace("{name}", enchant.getDisplayName())));
+        meta.setDisplayName(ChatUtils.format(Config.Setting.BOOKS_NAME_FORMAT.getString().replace("%name%", enchant.getDisplayName())));
 
         book.setItemMeta(meta);
 

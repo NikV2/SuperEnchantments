@@ -2,11 +2,13 @@ name: SuperEnchantments
 version: ${project.version}
 main: me.nik.superenchantments.SuperEnchantments
 api-version: '1.17'
-description: Lore-based custom enchantments.
+prefix: SuperEnchantments
+authors: [ Nik ]
+description: ${project.description}
 commands:
   superenchantments:
     description: Manage SuperEnchantments.
-    aliases: [se, senchants]
+    aliases: [ se, senchants ]
     usage: /<command> <list|enchant|remove|book|reload>
 permissions:
   superenchantments.admin:

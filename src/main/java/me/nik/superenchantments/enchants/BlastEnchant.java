@@ -1,0 +1,277 @@
+package me.nik.superenchantments.enchants;
+
+import me.nik.superenchantments.SuperEnchantments;
+import me.nik.superenchantments.enums.Permissions;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.Container;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.ExperienceOrb;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
+
+public class BlastEnchant extends CustomEnchant {
+
+    private final Set<UUID> blasting = new HashSet<>();
+
+    public BlastEnchant(SuperEnchantments plugin) {
+        super(plugin, "blast", "Blast", "&a", "PICKAXE");
+
+        addOption("radius", 3, "How many extra 3x3 layers are mined forward", "The width and height never grow, only the depth does");
+        addOption("sneak-disables", true, "Holding sneak turns Blast off");
+        addOption("disabled-worlds", new ArrayList<String>(), "Blast does not work in these worlds", "Example: [world_nether, creative]");
+        addOption("disabled-gamemodes", Arrays.asList("CREATIVE", "SPECTATOR"), "Blast does not work in these gamemodes");
+        addOption("drop-items", true, "false = the extra blocks just vanish");
+        addOption("drop-xp", true, "Drop experience from the extra blocks");
+        addOption("skip-containers", true, "Never break chests, furnaces, hoppers and so on");
+        addOption("blocked-blocks", Arrays.asList(
+                "BEDROCK",
+                "BARRIER",
+                "SPAWNER",
+                "END_PORTAL",
+                "END_PORTAL_FRAME",
+                "COMMAND_BLOCK",
+                "CHAIN_COMMAND_BLOCK",
+                "REPEATING_COMMAND_BLOCK",
+                "STRUCTURE_BLOCK",
+                "JIGSAW"
+        ), "Blocks that Blast never breaks");
+        addOption("tool-damage.enabled", true, "Should the extra blocks wear the tool down?", "Blast stops when the tool is nearly broken so the vanilla break happens on the block you actually mined");
+        addOption("tool-damage.per-block", 1, "Durability lost per extra block");
+        addOption("tool-damage.respect-unbreaking", true, "Should the Unbreaking enchant reduce the damage?");
+        addOption("effects.particle", "CLOUD", "NONE to disable", "Particle names depend on the server version");
+        addOption("effects.particle-count", 5, "The amount of particles");
+        addOption("effects.sound", "entity.generic.explode", "NONE to disable", "Use the namespaced sound key");
+        addOption("effects.sound-volume", 0.4, "The volume of the sound");
+        addOption("effects.sound-pitch", 1.2, "The pitch of the sound");
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onBreak(BlockBreakEvent e) {
+
+        if (!isEnabled()) return;
+
+        Player player = e.getPlayer();
+
+        if (blasting.contains(player.getUniqueId())) return;
+
+        if (!player.hasPermission(Permissions.USE.getPermission())) return;
+
+        if (getStringList("disabled-gamemodes").contains(player.getGameMode().name())) return;
+
+        if (getStringList("disabled-worlds").contains(player.getWorld().getName())) return;
+
+        if (getBoolean("sneak-disables") && player.isSneaking()) return;
+
+        ItemStack tool = player.getInventory().getItemInMainHand();
+
+        if (!appliesTo(tool.getType())) return;
+
+        if (!hasEnchant(tool)) return;
+
+        int radius = Math.max(1, getInt("radius"));
+
+        Block origin = e.getBlock();
+
+        BlockFace miningDirection = getMiningDirection(player);
+
+        boolean damageEnabled = getBoolean("tool-damage.enabled");
+        int perBlock = Math.max(0, getInt("tool-damage.per-block"));
+        boolean unbreaking = getBoolean("tool-damage.respect-unbreaking");
+
+        boolean dropItems = getBoolean("drop-items");
+        boolean dropXp = getBoolean("drop-xp");
+
+        boolean brokeAny = false;
+
+        blasting.add(player.getUniqueId());
+
+        try {
+
+            outer:
+            for (int depth = 0; depth <= radius; depth++) {
+
+                for (int x = -1; x <= 1; x++) {
+
+                    for (int y = -1; y <= 1; y++) {
+
+                        if (depth == 0 && x == 0 && y == 0) continue;
+
+                        Block target = getBlastBlock(origin, miningDirection, depth, x, y);
+
+                        if (target.equals(origin)) continue;
+
+                        if (!canBlast(target)) continue;
+
+                        BlockBreakEvent extra = new BlockBreakEvent(target, player);
+
+                        Bukkit.getPluginManager().callEvent(extra);
+
+                        if (extra.isCancelled()) continue;
+
+                        if (damageEnabled && perBlock > 0) {
+
+                            if (!damageTool(tool, perBlock, unbreaking)) break outer;
+                        }
+
+                        int exp = extra.getExpToDrop();
+
+                        Location center = target.getLocation().add(0.5, 0.5, 0.5);
+
+                        if (dropItems && extra.isDropItems()) {
+                            target.breakNaturally(tool);
+                        } else {
+                            target.setType(Material.AIR);
+                        }
+
+                        if (dropXp && exp > 0) {
+                            target.getWorld().spawn(center, ExperienceOrb.class, orb -> orb.setExperience(exp));
+                        }
+
+                        brokeAny = true;
+                    }
+                }
+            }
+
+        } finally {
+            blasting.remove(player.getUniqueId());
+        }
+
+        if (brokeAny) {
+            player.getInventory().setItemInMainHand(tool);
+            playEffects(origin);
+        }
+    }
+
+    private Block getBlastBlock(Block origin, BlockFace direction, int depth, int x, int y) {
+
+        if (direction == BlockFace.EAST || direction == BlockFace.WEST) {
+            return origin.getRelative(direction.getModX() * depth, y, x);
+        }
+
+        if (direction == BlockFace.UP || direction == BlockFace.DOWN) {
+            return origin.getRelative(x, direction.getModY() * depth, y);
+        }
+
+        return origin.getRelative(x, y, direction.getModZ() * depth);
+    }
+
+    private BlockFace getMiningDirection(Player player) {
+
+        Vector direction = player.getEyeLocation().getDirection().normalize();
+
+        double x = Math.abs(direction.getX());
+        double y = Math.abs(direction.getY());
+        double z = Math.abs(direction.getZ());
+
+        if (y > x && y > z) {
+            return direction.getY() > 0 ? BlockFace.UP : BlockFace.DOWN;
+        }
+
+        if (x > z) {
+            return direction.getX() > 0 ? BlockFace.EAST : BlockFace.WEST;
+        }
+
+        return direction.getZ() > 0 ? BlockFace.SOUTH : BlockFace.NORTH;
+    }
+
+    private boolean canBlast(Block block) {
+
+        Material type = block.getType();
+
+        if (type.isAir()) return false;
+
+        if (block.isLiquid()) return false;
+
+        if (type.getHardness() < 0) return false;
+
+        if (getStringList("blocked-blocks").contains(type.name())) return false;
+
+        return !(getBoolean("skip-containers") && block.getState() instanceof Container);
+    }
+
+    private boolean damageTool(ItemStack tool, int perBlock, boolean respectUnbreaking) {
+
+        int maxDurability = tool.getType().getMaxDurability();
+
+        if (maxDurability <= 0) return true;
+
+        ItemMeta meta = tool.getItemMeta();
+
+        if (!(meta instanceof Damageable)) return true;
+
+        Damageable damageable = (Damageable) meta;
+
+        int amount = perBlock;
+
+        if (respectUnbreaking) {
+
+            Enchantment unbreakingEnchant = Enchantment.getByKey(NamespacedKey.minecraft("unbreaking"));
+
+            int unbreaking = unbreakingEnchant == null ? 0 : tool.getEnchantmentLevel(unbreakingEnchant);
+
+            if (unbreaking > 0) {
+
+                int actual = 0;
+
+                for (int i = 0; i < perBlock; i++) {
+
+                    if (ThreadLocalRandom.current().nextInt(unbreaking + 1) == 0) actual++;
+                }
+
+                amount = actual;
+            }
+        }
+
+        if (damageable.getDamage() + amount >= maxDurability - 1) return false;
+
+        damageable.setDamage(damageable.getDamage() + amount);
+
+        tool.setItemMeta(meta);
+
+        return true;
+    }
+
+    private void playEffects(Block origin) {
+
+        Location loc = origin.getLocation().add(0.5, 0.5, 0.5);
+
+        String particleName = getString("effects.particle");
+
+        if (!particleName.equalsIgnoreCase("NONE")) {
+
+            try {
+
+                Particle particle = Particle.valueOf(particleName.toUpperCase());
+
+                origin.getWorld().spawnParticle(particle, loc, Math.max(1, getInt("effects.particle-count")), 0.4, 0.4, 0.4, 0.02);
+
+            } catch (IllegalArgumentException ignored) {
+            }
+        }
+
+        String sound = getString("effects.sound");
+
+        if (!sound.equalsIgnoreCase("NONE")) {
+            origin.getWorld().playSound(loc, sound, (float) getDouble("effects.sound-volume"), (float) getDouble("effects.sound-pitch"));
+        }
+    }
+}

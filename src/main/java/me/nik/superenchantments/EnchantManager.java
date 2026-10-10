@@ -1,5 +1,6 @@
 package me.nik.superenchantments;
 
+import me.nik.superenchantments.enchants.CustomEnchant;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;

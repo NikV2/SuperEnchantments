@@ -2,6 +2,7 @@ package me.nik.superenchantments;
 
 import me.nik.superenchantments.commands.CommandManager;
 import me.nik.superenchantments.enchants.BlastEnchant;
+import me.nik.superenchantments.enchants.SniperEnchant;
 import me.nik.superenchantments.files.Config;
 import me.nik.superenchantments.files.Lang;
 import me.nik.superenchantments.listeners.AnvilListener;
@@ -51,7 +52,10 @@ public class SuperEnchantments extends JavaPlugin {
         this.enchantManager = new EnchantManager(this);
         this.enchantManager.initialize();
 
-        this.enchantManager.register(new BlastEnchant(this));
+        this.enchantManager.register(
+                new BlastEnchant(this),
+                new SniperEnchant(this)
+        );
         ChatUtils.log(this.enchantManager.getAll().size() + " enchants have been loaded in " + test.getMillis() + "ms");
 
         test.reset();

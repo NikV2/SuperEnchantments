@@ -36,15 +36,13 @@ public class EnchantManager implements AbstractManager {
         enchants.clear();
     }
 
-    public void register(CustomEnchant enchant) {
-
-        enchants.put(enchant.getId(), enchant);
-
-        enchant.writeDefaults();
-
-        plugin.getConfiguration().getConfig().save();
-
-        Bukkit.getPluginManager().registerEvents(enchant, plugin);
+    public void register(CustomEnchant... enchantments) {
+        for (CustomEnchant enchant : enchantments) {
+            enchants.put(enchant.getId(), enchant);
+            enchant.writeDefaults();
+            plugin.getConfiguration().getConfig().save();
+            Bukkit.getPluginManager().registerEvents(enchant, plugin);
+        }
     }
 
     public void reload() {

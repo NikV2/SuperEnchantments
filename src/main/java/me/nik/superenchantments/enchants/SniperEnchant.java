@@ -10,7 +10,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class SniperEnchant extends CustomEnchant {
-    protected SniperEnchant(SuperEnchantments plugin) {
+    public SniperEnchant(SuperEnchantments plugin) {
         super(plugin, "sniper", "Sniper", "&a", "BOW");
 
         addOption("distance_multiplier", 0.5, "Drop experience from the extra blocks");

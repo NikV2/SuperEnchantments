@@ -22,7 +22,7 @@ public abstract class CustomEnchant implements Listener {
 
     private final Map<String, Option> options = new LinkedHashMap<>();
 
-    protected CustomEnchant(SuperEnchantments plugin, String id, String displayName, String loreColor, String... appliesTo) {
+    public CustomEnchant(SuperEnchantments plugin, String id, String displayName, String loreColor, String... appliesTo) {
         this.plugin = plugin;
         this.id = id.toLowerCase(Locale.ROOT);
 

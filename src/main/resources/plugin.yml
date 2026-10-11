@@ -14,6 +14,3 @@ permissions:
   superenchantments.admin:
     description: Use the /superenchantments command.
     default: op
-  superenchantments.use:
-    description: Allows custom enchants to trigger for the player.
-    default: true

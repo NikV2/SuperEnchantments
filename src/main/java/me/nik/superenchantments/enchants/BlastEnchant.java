@@ -73,8 +73,6 @@ public class BlastEnchant extends CustomEnchant {
 
         if (blasting.contains(player.getUniqueId())) return;
 
-        if (!player.hasPermission(Permissions.USE.getPermission())) return;
-
         if (getStringList("disabled-gamemodes").contains(player.getGameMode().name())) return;
 
         if (getStringList("disabled-worlds").contains(player.getWorld().getName())) return;

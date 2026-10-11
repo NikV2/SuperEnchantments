@@ -2,11 +2,15 @@ package me.nik.superenchantments;
 
 import me.nik.superenchantments.commands.CommandManager;
 import me.nik.superenchantments.enchants.BlastEnchant;
+import me.nik.superenchantments.enchants.CurseEnchant;
+import me.nik.superenchantments.enchants.DodgeEnchant;
+import me.nik.superenchantments.enchants.GlowEnchant;
 import me.nik.superenchantments.enchants.SniperEnchant;
 import me.nik.superenchantments.files.Config;
 import me.nik.superenchantments.files.Lang;
 import me.nik.superenchantments.listeners.AnvilListener;
 import me.nik.superenchantments.managers.EnchantManager;
+import me.nik.superenchantments.tasks.UpdateTask;
 import me.nik.superenchantments.utils.ChatUtils;
 import me.nik.superenchantments.utils.MillisTest;
 import org.bukkit.Bukkit;
@@ -54,9 +58,16 @@ public class SuperEnchantments extends JavaPlugin {
 
         this.enchantManager.register(
                 new BlastEnchant(this),
-                new SniperEnchant(this)
+                new SniperEnchant(this),
+                new GlowEnchant(this),
+                new CurseEnchant(this),
+                new DodgeEnchant(this)
         );
         ChatUtils.log(this.enchantManager.getAll().size() + " enchants have been loaded in " + test.getMillis() + "ms");
+
+        test.reset();
+        new UpdateTask().runTaskTimer(this, 20L, 20L);
+        ChatUtils.log("Tasks have been loaded in " + test.getMillis() + "ms");
 
         test.reset();
         getCommand("superenchantments").setExecutor(new CommandManager(this));

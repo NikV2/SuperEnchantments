@@ -1,6 +1,7 @@
 package me.nik.superenchantments.enchants;
 
 import me.nik.superenchantments.SuperEnchantments;
+import me.nik.superenchantments.enums.Permissions;
 import org.bukkit.Location;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
@@ -8,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class SniperEnchant extends CustomEnchant {
     public SniperEnchant(SuperEnchantments plugin) {
@@ -19,6 +21,8 @@ public class SniperEnchant extends CustomEnchant {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBossAttack(EntityDamageByEntityEvent e) {
 
+        if (!isEnabled()) return;
+
         Entity target = e.getEntity();
         Entity damager = e.getDamager();
 
@@ -29,6 +33,10 @@ public class SniperEnchant extends CustomEnchant {
         if (!(arrow.getShooter() instanceof Player)) return;
 
         Player player = (Player) arrow.getShooter();
+
+        ItemStack tool = player.getInventory().getItemInMainHand();
+
+        if (!appliesTo(tool.getType()) || !hasEnchant(tool)) return;
 
         Location playerLocation = player.getLocation().clone();
         Location targetLocation = target.getLocation().clone();

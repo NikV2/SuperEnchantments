@@ -15,7 +15,7 @@ public class SniperEnchant extends CustomEnchant {
     private double multiplier;
 
     public SniperEnchant(SuperEnchantments plugin) {
-        super(plugin, "sniper", "Sniper", "&a", "BOW");
+        super(plugin, "sniper", "Sniper", "&a", "BOW", "CROSSBOW");
 
         setDescription("&7Your arrows deal more damage", "&7the further they travel");
 

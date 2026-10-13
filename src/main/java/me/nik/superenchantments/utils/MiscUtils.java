@@ -1,20 +1,24 @@
 package me.nik.superenchantments.utils;
 
-import com.google.common.base.Charsets;
+import org.bukkit.Effect;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ThreadLocalRandom;
 
 public final class MiscUtils {
 
@@ -33,7 +37,7 @@ public final class MiscUtils {
 
             final FileInputStream stream = new FileInputStream(file);
 
-            config.load(new InputStreamReader(stream, Charsets.UTF_8));
+            config.load(new InputStreamReader(stream, StandardCharsets.UTF_8));
 
         } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
@@ -65,6 +69,52 @@ public final class MiscUtils {
         item.setItemMeta(itemMeta);
 
         return item;
+    }
+
+    public static boolean damageTool(ItemStack tool, int amount, boolean respectUnbreaking) {
+
+        int maxDurability = tool.getType().getMaxDurability();
+
+        if (maxDurability <= 0) return true;
+
+        ItemMeta meta = tool.getItemMeta();
+
+        if (!(meta instanceof Damageable)) return true;
+
+        Damageable damageable = (Damageable) meta;
+
+        int damage = amount;
+
+        if (respectUnbreaking && UNBREAKING != null) {
+
+            int level = tool.getEnchantmentLevel(UNBREAKING);
+
+            if (level > 0) {
+
+                damage = 0;
+
+                for (int i = 0; i < amount; i++) {
+
+                    if (ThreadLocalRandom.current().nextInt(level + 1) == 0) damage++;
+                }
+            }
+        }
+
+        if (damageable.getDamage() + damage >= maxDurability - 1) return false;
+
+        damageable.setDamage(damageable.getDamage() + damage);
+
+        tool.setItemMeta(meta);
+
+        return true;
+    }
+
+    public static void playBreakEffect(Block block) {
+
+        try {
+            block.getWorld().playEffect(block.getLocation(), Effect.STEP_SOUND, block.getBlockData());
+        } catch (IllegalArgumentException ignored) {
+        }
     }
 
     public static String prettify(String name) {

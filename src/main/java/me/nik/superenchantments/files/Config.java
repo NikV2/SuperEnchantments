@@ -83,6 +83,7 @@ public class Config {
 
         ANVIL("anvil", "", "Anvil Settings"),
         ANVIL_ENABLED("anvil.enabled", true, "Should players be able to apply enchant books to tools in an anvil?"),
+        ANVIL_LIMIT("anvil.limit", 3, "The maximum limit of custom enchantments allowed in a single piece"),
         ANVIL_COST("anvil.cost", 5, "The XP level cost of applying an enchant in the anvil");
 
         private final String key;

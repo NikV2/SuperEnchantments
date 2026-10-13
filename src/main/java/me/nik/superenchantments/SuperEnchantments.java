@@ -6,9 +6,13 @@ import me.nik.superenchantments.enchants.CurseEnchant;
 import me.nik.superenchantments.enchants.DodgeEnchant;
 import me.nik.superenchantments.enchants.GlowEnchant;
 import me.nik.superenchantments.enchants.LifestealEnchant;
+import me.nik.superenchantments.enchants.LumberjackEnchant;
+import me.nik.superenchantments.enchants.RejuvenationEnchant;
 import me.nik.superenchantments.enchants.SniperEnchant;
 import me.nik.superenchantments.enchants.StrikeEnchant;
 import me.nik.superenchantments.enchants.SwiftEnchant;
+import me.nik.superenchantments.enchants.TelepathyEnchant;
+import me.nik.superenchantments.enchants.ThunderEnchant;
 import me.nik.superenchantments.files.Config;
 import me.nik.superenchantments.files.Enchantments;
 import me.nik.superenchantments.files.Lang;
@@ -72,7 +76,11 @@ public class SuperEnchantments extends JavaPlugin {
                 new SwiftEnchant(this),
                 new DodgeEnchant(this),
                 new LifestealEnchant(this),
-                new StrikeEnchant(this)
+                new StrikeEnchant(this),
+                new ThunderEnchant(this),
+                new RejuvenationEnchant(this),
+                new TelepathyEnchant(this),
+                new LumberjackEnchant(this)
         );
         ChatUtils.log(this.enchantManager.getAll().size() + " enchants have been loaded in " + test.getMillis() + "ms");
 

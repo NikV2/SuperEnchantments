@@ -1,6 +1,7 @@
 package me.nik.superenchantments.enchants;
 
 import me.nik.superenchantments.SuperEnchantments;
+import me.nik.superenchantments.utils.MiscUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -165,7 +166,10 @@ public class BlastEnchant extends CustomEnchant {
 
         BlockFace miningDirection = getMiningDirection(player);
 
+        TelepathyEnchant telepathy = TelepathyEnchant.get(plugin, tool);
+
         boolean brokeAny = false;
+        boolean collected = false;
 
         blasting.add(player.getUniqueId());
 
@@ -194,13 +198,25 @@ public class BlastEnchant extends CustomEnchant {
 
                         if (damageEnabled && perBlock > 0) {
 
-                            if (!damageTool(tool)) break outer;
+                            if (!MiscUtils.damageTool(tool, perBlock, respectUnbreaking)) break outer;
                         }
 
                         int exp = extra.getExpToDrop();
 
                         if (dropItems && extra.isDropItems()) {
-                            target.breakNaturally(tool);
+
+                            if (telepathy != null && (skipContainers || !(target.getState() instanceof Container))) {
+
+                                collected |= telepathy.collect(player, target.getDrops(tool, player), target.getLocation().add(0.5, 0.5, 0.5));
+
+                                MiscUtils.playBreakEffect(target);
+
+                                target.setType(Material.AIR);
+
+                            } else {
+                                target.breakNaturally(tool);
+                            }
+
                         } else {
                             target.setType(Material.AIR);
                         }
@@ -222,6 +238,8 @@ public class BlastEnchant extends CustomEnchant {
         if (brokeAny) {
             player.getInventory().setItemInMainHand(tool);
             playEffects(origin);
+
+            if (collected) telepathy.playSound(player);
         }
     }
 
@@ -270,46 +288,6 @@ public class BlastEnchant extends CustomEnchant {
         if (blockedBlocks.contains(type)) return false;
 
         return !(skipContainers && block.getState() instanceof Container);
-    }
-
-    private boolean damageTool(ItemStack tool) {
-
-        int maxDurability = tool.getType().getMaxDurability();
-
-        if (maxDurability <= 0) return true;
-
-        ItemMeta meta = tool.getItemMeta();
-
-        if (!(meta instanceof Damageable)) return true;
-
-        Damageable damageable = (Damageable) meta;
-
-        int amount = perBlock;
-
-        if (respectUnbreaking && unbreaking != null) {
-
-            int level = tool.getEnchantmentLevel(unbreaking);
-
-            if (level > 0) {
-
-                int actual = 0;
-
-                for (int i = 0; i < perBlock; i++) {
-
-                    if (ThreadLocalRandom.current().nextInt(level + 1) == 0) actual++;
-                }
-
-                amount = actual;
-            }
-        }
-
-        if (damageable.getDamage() + amount >= maxDurability - 1) return false;
-
-        damageable.setDamage(damageable.getDamage() + amount);
-
-        tool.setItemMeta(meta);
-
-        return true;
     }
 
     private void playEffects(Block origin) {

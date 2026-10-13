@@ -40,6 +40,8 @@ public class AnvilListener implements Listener {
 
         if (onBook.isEmpty()) return;
 
+        if ((onBook.size() + 1) > Config.Setting.ANVIL_LIMIT.getInt()) return;
+
         ItemStack base = e.getResult();
 
         ItemStack result = (base != null && base.getType() != Material.AIR) ? base : left;

@@ -9,10 +9,14 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 public abstract class CustomEnchant implements Listener {
 
@@ -21,8 +25,18 @@ public abstract class CustomEnchant implements Listener {
     private final String id;
 
     private final Map<String, Option> options = new LinkedHashMap<>();
+    private final Map<String, Object> values = new HashMap<>();
 
-    public CustomEnchant(SuperEnchantments plugin, String id, String displayName, String loreColor, String... appliesTo) {
+    private boolean enabled;
+    private String displayName;
+    private String plainName;
+    private String loreLine;
+    private List<String> description = Collections.emptyList();
+    private List<String> appliesTo = Collections.emptyList();
+    private Set<Material> materials = EnumSet.noneOf(Material.class);
+    private List<Material> materialList = Collections.emptyList();
+
+    protected CustomEnchant(SuperEnchantments plugin, String id, String displayName, String loreColor, String... appliesTo) {
         this.plugin = plugin;
         this.id = id.toLowerCase(Locale.ROOT);
 
@@ -30,65 +44,148 @@ public abstract class CustomEnchant implements Listener {
         addOption("display-name", displayName, "The name shown in the lore, it is also how the enchant is found on items");
         addOption("lore-color", loreColor, "The color of the lore line");
         addOption("applies-to", Arrays.asList(appliesTo), "The material suffixes this enchant can be applied to, or ALL");
+        addOption("description", new ArrayList<String>(), "The description shown in the enchantments menu");
     }
 
     protected void addOption(String key, Object defaultValue, String... comments) {
-        this.options.put(key, new Option(defaultValue, comments));
+        options.put(key, new Option(defaultValue, comments));
     }
 
-    public void writeDefaults() {
+    protected void setDescription(String... lines) {
+        addOption("description", Arrays.asList(lines), "The description shown in the enchantments menu");
+    }
 
-        CommentedFileConfiguration config = this.plugin.getConfiguration().getConfig();
+    protected void onLoad() {
+    }
 
-        String section = "enchants." + this.id;
+    public void load(CommentedFileConfiguration config) {
 
-        if (config.get(section) == null) {
-            config.set(section, "", getDisplayName() + " Settings");
+        if (config.get(id) == null) {
+            config.set(id, "", options.get("display-name").defaultValue + " Settings");
         }
 
-        for (Map.Entry<String, Option> entry : this.options.entrySet()) {
+        for (Map.Entry<String, Option> entry : options.entrySet()) {
 
-            String path = section + "." + entry.getKey();
+            String path = id + "." + entry.getKey();
 
-            if (config.get(path) == null) {
-                config.set(path, entry.getValue().defaultValue, entry.getValue().comments);
+            if (config.get(path) != null) continue;
+
+            config.set(path, entry.getValue().defaultValue, entry.getValue().comments);
+        }
+
+        refresh(config);
+    }
+
+    private void refresh(CommentedFileConfiguration config) {
+
+        values.clear();
+
+        for (Map.Entry<String, Option> entry : options.entrySet()) {
+
+            Object value = config.get(id + "." + entry.getKey());
+
+            Object def = entry.getValue().defaultValue;
+
+            if (!isValid(value, def)) {
+
+                if (value != null) ChatUtils.log("Invalid value for " + id + "." + entry.getKey() + ", using the default");
+
+                value = def;
+            }
+
+            if (value instanceof List) {
+
+                List<String> list = new ArrayList<>();
+
+                for (Object o : (List<?>) value) list.add(String.valueOf(o));
+
+                value = Collections.unmodifiableList(list);
+            }
+
+            values.put(entry.getKey(), value);
+        }
+
+        enabled = getBoolean("enabled");
+        displayName = getString("display-name");
+        plainName = ChatUtils.plain(displayName);
+        loreLine = ChatUtils.format(getString("lore-color") + displayName);
+        appliesTo = getStringList("applies-to");
+
+        List<String> lines = new ArrayList<>();
+
+        for (String line : getStringList("description")) lines.add(ChatUtils.format(line));
+
+        description = Collections.unmodifiableList(lines);
+
+        materials = resolve(appliesTo);
+        materialList = Collections.unmodifiableList(new ArrayList<>(materials));
+
+        onLoad();
+    }
+
+    private boolean isValid(Object value, Object def) {
+
+        if (value == null) return false;
+
+        if (def instanceof Boolean) return value instanceof Boolean;
+
+        if (def instanceof Number) return value instanceof Number;
+
+        if (def instanceof List) return value instanceof List;
+
+        return !(value instanceof List);
+    }
+
+    private Set<Material> resolve(List<String> types) {
+
+        Set<Material> out = EnumSet.noneOf(Material.class);
+
+        for (Material material : Material.values()) {
+
+            if (material.name().startsWith("LEGACY_") || !material.isItem()) continue;
+
+            for (String type : types) {
+
+                String t = type.toUpperCase(Locale.ROOT);
+
+                if (t.equals("ALL") || material.name().equals(t) || material.name().endsWith("_" + t)) {
+                    out.add(material);
+                    break;
+                }
             }
         }
+
+        return out;
     }
 
-    private Object value(String key) {
+    private Object get(String key) {
 
-        Object value = this.plugin.getConfiguration().getConfig().get("enchants." + this.id + "." + key);
+        Object value = values.get(key);
 
-        if (value != null) return value;
+        if (value == null) throw new IllegalArgumentException("The enchant " + id + " has no option named " + key);
 
-        Option option = this.options.get(key);
-
-        return option == null ? null : option.defaultValue;
+        return value;
     }
 
     protected boolean getBoolean(String key) {
-        return (boolean) value(key);
+        return (boolean) get(key);
     }
 
     protected int getInt(String key) {
-        return ((Number) value(key)).intValue();
+        return ((Number) get(key)).intValue();
     }
 
     protected double getDouble(String key) {
-        return ((Number) value(key)).doubleValue();
+        return ((Number) get(key)).doubleValue();
     }
 
     protected String getString(String key) {
-        return String.valueOf(value(key));
+        return String.valueOf(get(key));
     }
 
     @SuppressWarnings("unchecked")
     protected List<String> getStringList(String key) {
-
-        Object value = value(key);
-
-        return value instanceof List ? (List<String>) value : new ArrayList<>();
+        return (List<String>) get(key);
     }
 
     public String getId() {
@@ -96,31 +193,43 @@ public abstract class CustomEnchant implements Listener {
     }
 
     public boolean isEnabled() {
-        return getBoolean("enabled");
+        return enabled;
     }
 
     public String getDisplayName() {
-        return getString("display-name");
+        return displayName;
+    }
+
+    public String getPlainName() {
+        return plainName;
+    }
+
+    public String getLoreLine() {
+        return loreLine;
+    }
+
+    public List<String> getDescription() {
+        return description;
+    }
+
+    public List<String> getAppliesTo() {
+        return appliesTo;
+    }
+
+    public List<Material> getMaterials() {
+        return materialList;
     }
 
     public boolean appliesTo(Material material) {
-
-        for (String type : getStringList("applies-to")) {
-
-            String t = type.toUpperCase(Locale.ROOT);
-
-            if (t.equals("ALL") || material.name().equals(t) || material.name().endsWith("_" + t)) return true;
-        }
-
-        return false;
+        return materials.contains(material);
     }
 
-    public String formatLore() {
-        return ChatUtils.format(getString("lore-color") + getDisplayName());
+    public boolean matches(String line) {
+        return line.equals(loreLine) || ChatUtils.plain(line).equals(plainName);
     }
 
     public boolean hasEnchant(ItemStack item) {
-        return this.plugin.getEnchantManager().has(item, this);
+        return plugin.getEnchantManager().has(item, this);
     }
 
     private static class Option {

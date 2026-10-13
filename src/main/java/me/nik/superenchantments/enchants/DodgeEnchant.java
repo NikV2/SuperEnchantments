@@ -11,27 +11,34 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class DodgeEnchant extends CustomEnchant {
+
+    private double chance;
+
     public DodgeEnchant(SuperEnchantments plugin) {
         super(plugin, "dodge", "Dodge", "&a", "HELMET", "CHESTPLATE", "LEGGINGS", "BOOTS");
 
-        addOption("chance", 20.0D, "The chance of the enchant applying");
+        setDescription("&7A chance to completely", "&7avoid the damage you take");
+
+        addOption("chance", 30.0D, "The chance of the enchant applying");
+    }
+
+    @Override
+    protected void onLoad() {
+        chance = getDouble("chance");
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    public void onBossAttack(EntityDamageByEntityEvent e) {
+    public void onAttack(EntityDamageByEntityEvent e) {
 
         if (!isEnabled()) return;
 
         Entity target = e.getEntity();
-        Entity damager = e.getDamager();
 
-        if ((!(target instanceof Player)) || damager == null) return;
+        if (!(target instanceof Player)) return;
 
-        Player targetPlayer = (Player) target;
+        if (!hasDodgeArmor((Player) target)) return;
 
-        if (!hasDodgeArmor(targetPlayer)) return;
-
-        if (RandomUtils.chance(getDouble("chance"))) {
+        if (RandomUtils.chance(chance)) {
             e.setDamage(0D);
         }
     }
@@ -42,9 +49,7 @@ public class DodgeEnchant extends CustomEnchant {
 
             if (item == null || item.getType() == Material.AIR) continue;
 
-            if (appliesTo(item.getType()) && hasEnchant(item)) {
-                return true;
-            }
+            if (appliesTo(item.getType()) && hasEnchant(item)) return true;
         }
 
         return false;

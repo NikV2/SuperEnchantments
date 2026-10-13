@@ -4,6 +4,7 @@ import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.commands.subcommands.BookCommand;
 import me.nik.superenchantments.commands.subcommands.EnchantCommand;
 import me.nik.superenchantments.commands.subcommands.ListCommand;
+import me.nik.superenchantments.commands.subcommands.MenuCommand;
 import me.nik.superenchantments.commands.subcommands.ReloadCommand;
 import me.nik.superenchantments.commands.subcommands.RemoveCommand;
 import me.nik.superenchantments.enums.MsgType;
@@ -32,6 +33,7 @@ public class CommandManager implements TabExecutor {
         this.subCommands.add(new EnchantCommand(plugin));
         this.subCommands.add(new RemoveCommand(plugin));
         this.subCommands.add(new BookCommand(plugin));
+        this.subCommands.add(new MenuCommand(plugin));
     }
 
     @Override
@@ -120,7 +122,7 @@ public class CommandManager implements TabExecutor {
         this.subCommands.stream()
                 .filter(subCommand -> sender.hasPermission(subCommand.getPermission()))
                 .forEach(subCommand ->
-                        sender.sendMessage(ChatColor.GOLD + subCommand.getSyntax() + ChatColor.DARK_GRAY + " - "
+                        sender.sendMessage(ChatColor.AQUA + subCommand.getSyntax() + ChatColor.DARK_GRAY + " - "
                                 + ChatColor.GRAY + subCommand.getDescription()));
 
         sender.sendMessage("");

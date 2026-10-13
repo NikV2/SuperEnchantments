@@ -5,10 +5,15 @@ import me.nik.superenchantments.enchants.BlastEnchant;
 import me.nik.superenchantments.enchants.CurseEnchant;
 import me.nik.superenchantments.enchants.DodgeEnchant;
 import me.nik.superenchantments.enchants.GlowEnchant;
+import me.nik.superenchantments.enchants.LifestealEnchant;
 import me.nik.superenchantments.enchants.SniperEnchant;
+import me.nik.superenchantments.enchants.StrikeEnchant;
+import me.nik.superenchantments.enchants.SwiftEnchant;
 import me.nik.superenchantments.files.Config;
+import me.nik.superenchantments.files.Enchantments;
 import me.nik.superenchantments.files.Lang;
 import me.nik.superenchantments.listeners.AnvilListener;
+import me.nik.superenchantments.listeners.GuiListener;
 import me.nik.superenchantments.managers.EnchantManager;
 import me.nik.superenchantments.tasks.UpdateTask;
 import me.nik.superenchantments.utils.ChatUtils;
@@ -30,6 +35,8 @@ public class SuperEnchantments extends JavaPlugin {
 
     private final Config config = new Config(this);
     private final Lang lang = new Lang();
+    private final Enchantments enchantments = new Enchantments(this);
+    private final UpdateTask updateTask = new UpdateTask();
 
     private EnchantManager enchantManager;
 
@@ -46,6 +53,7 @@ public class SuperEnchantments extends JavaPlugin {
 
         test.reset();
         this.config.setup();
+        this.enchantments.setup();
         this.lang.setup(this);
         this.lang.addDefaults();
         this.lang.get().options().copyDefaults(true);
@@ -61,12 +69,15 @@ public class SuperEnchantments extends JavaPlugin {
                 new SniperEnchant(this),
                 new GlowEnchant(this),
                 new CurseEnchant(this),
-                new DodgeEnchant(this)
+                new SwiftEnchant(this),
+                new DodgeEnchant(this),
+                new LifestealEnchant(this),
+                new StrikeEnchant(this)
         );
         ChatUtils.log(this.enchantManager.getAll().size() + " enchants have been loaded in " + test.getMillis() + "ms");
 
         test.reset();
-        new UpdateTask().runTaskTimer(this, 20L, 20L);
+        this.updateTask.runTaskTimer(this, 20L, 20L);
         ChatUtils.log("Tasks have been loaded in " + test.getMillis() + "ms");
 
         test.reset();
@@ -75,6 +86,7 @@ public class SuperEnchantments extends JavaPlugin {
 
         test.reset();
         Bukkit.getPluginManager().registerEvents(new AnvilListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new GuiListener(), this);
         ChatUtils.log("Listeners have been loaded in " + test.getMillis() + "ms");
     }
 
@@ -84,6 +96,7 @@ public class SuperEnchantments extends JavaPlugin {
 
         Bukkit.getScheduler().cancelTasks(this);
 
+        this.updateTask.clear();
         this.enchantManager.shutdown();
 
         this.config.reset();
@@ -95,6 +108,14 @@ public class SuperEnchantments extends JavaPlugin {
 
     public EnchantManager getEnchantManager() {
         return enchantManager;
+    }
+
+    public Enchantments getEnchantments() {
+        return enchantments;
+    }
+
+    public UpdateTask getUpdateTask() {
+        return updateTask;
     }
 
     public Config getConfiguration() {

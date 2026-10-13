@@ -1,7 +1,6 @@
 package me.nik.superenchantments.enchants;
 
 import me.nik.superenchantments.SuperEnchantments;
-import me.nik.superenchantments.enums.Permissions;
 import org.bukkit.Location;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
@@ -12,21 +11,30 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class SniperEnchant extends CustomEnchant {
+
+    private double multiplier;
+
     public SniperEnchant(SuperEnchantments plugin) {
         super(plugin, "sniper", "Sniper", "&a", "BOW");
 
-        addOption("distance_multiplier", 0.5, "Drop experience from the extra blocks");
+        setDescription("&7Your arrows deal more damage", "&7the further they travel");
+
+        addOption("distance_multiplier", 0.5, "The distance between you and the target is multiplied by this and added to the arrow damage", "The maximum is 1.0");
+    }
+
+    @Override
+    protected void onLoad() {
+        multiplier = Math.min(1.0, getDouble("distance_multiplier"));
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    public void onBossAttack(EntityDamageByEntityEvent e) {
+    public void onAttack(EntityDamageByEntityEvent e) {
 
         if (!isEnabled()) return;
 
-        Entity target = e.getEntity();
         Entity damager = e.getDamager();
 
-        if (target == null || damager == null || !(damager instanceof Arrow)) return;
+        if (!(damager instanceof Arrow)) return;
 
         Arrow arrow = (Arrow) damager;
 
@@ -38,14 +46,12 @@ public class SniperEnchant extends CustomEnchant {
 
         if (!appliesTo(tool.getType()) || !hasEnchant(tool)) return;
 
-        Location playerLocation = player.getLocation().clone();
-        Location targetLocation = target.getLocation().clone();
+        Location from = player.getLocation();
+        Location to = e.getEntity().getLocation();
 
-        playerLocation.setY(0);
-        targetLocation.setY(0);
+        double x = from.getX() - to.getX();
+        double z = from.getZ() - to.getZ();
 
-        double distance = playerLocation.distance(targetLocation) * Math.min(1.0, getDouble("distance_multiplier"));
-
-        e.setDamage(e.getDamage() + distance);
+        e.setDamage(e.getDamage() + Math.sqrt(x * x + z * z) * multiplier);
     }
 }

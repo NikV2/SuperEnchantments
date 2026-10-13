@@ -1,8 +1,8 @@
 package me.nik.superenchantments.enchants;
 
 import me.nik.superenchantments.SuperEnchantments;
-import me.nik.superenchantments.enums.Permissions;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -23,6 +23,7 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -32,8 +33,28 @@ public class BlastEnchant extends CustomEnchant {
 
     private final Set<UUID> blasting = new HashSet<>();
 
+    private int radius;
+    private boolean sneakDisables;
+    private boolean dropItems;
+    private boolean dropXp;
+    private boolean skipContainers;
+    private boolean damageEnabled;
+    private int perBlock;
+    private boolean respectUnbreaking;
+    private int particleCount;
+    private float soundVolume;
+    private float soundPitch;
+    private String sound;
+    private Particle particle;
+    private Enchantment unbreaking;
+    private Set<String> disabledWorlds = new HashSet<>();
+    private Set<GameMode> disabledGameModes = EnumSet.noneOf(GameMode.class);
+    private Set<Material> blockedBlocks = EnumSet.noneOf(Material.class);
+
     public BlastEnchant(SuperEnchantments plugin) {
         super(plugin, "blast", "Blast", "&a", "PICKAXE");
+
+        setDescription("&7Mines the blocks around the one you break", "&7and digs deeper the higher the radius is");
 
         addOption("radius", 3, "How many extra 3x3 layers are mined forward", "The width and height never grow, only the depth does");
         addOption("sneak_disables", true, "Holding sneak turns Blast off");
@@ -64,6 +85,61 @@ public class BlastEnchant extends CustomEnchant {
         addOption("effects.sound_pitch", 1.2, "The pitch of the sound");
     }
 
+    @Override
+    protected void onLoad() {
+
+        radius = Math.max(1, getInt("radius"));
+        sneakDisables = getBoolean("sneak_disables");
+        dropItems = getBoolean("drop_items");
+        dropXp = getBoolean("drop_xp");
+        skipContainers = getBoolean("skip_containers");
+        damageEnabled = getBoolean("tool_damage.enabled");
+        perBlock = Math.max(0, getInt("tool_damage.per-block"));
+        respectUnbreaking = getBoolean("tool_damage.respect-unbreaking");
+        particleCount = Math.max(1, getInt("effects.particle_count"));
+        soundVolume = (float) getDouble("effects.sound_volume");
+        soundPitch = (float) getDouble("effects.sound_pitch");
+
+        unbreaking = Enchantment.getByKey(NamespacedKey.minecraft("unbreaking"));
+
+        disabledWorlds = new HashSet<>(getStringList("disabled_worlds"));
+
+        disabledGameModes = EnumSet.noneOf(GameMode.class);
+
+        for (String name : getStringList("disabled_gamemodes")) {
+
+            try {
+                disabledGameModes.add(GameMode.valueOf(name.toUpperCase()));
+            } catch (IllegalArgumentException ignored) {
+            }
+        }
+
+        blockedBlocks = EnumSet.noneOf(Material.class);
+
+        for (String name : getStringList("blocked_blocks")) {
+
+            Material material = Material.matchMaterial(name);
+
+            if (material != null) blockedBlocks.add(material);
+        }
+
+        String particleName = getString("effects.particle");
+
+        particle = null;
+
+        if (!particleName.equalsIgnoreCase("NONE")) {
+
+            try {
+                particle = Particle.valueOf(particleName.toUpperCase());
+            } catch (IllegalArgumentException ignored) {
+            }
+        }
+
+        String soundName = getString("effects.sound");
+
+        sound = soundName.equalsIgnoreCase("NONE") ? null : soundName;
+    }
+
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBreak(BlockBreakEvent e) {
 
@@ -73,11 +149,9 @@ public class BlastEnchant extends CustomEnchant {
 
         if (blasting.contains(player.getUniqueId())) return;
 
-        if (getStringList("disabled-gamemodes").contains(player.getGameMode().name())) return;
+        if (disabledGameModes.contains(player.getGameMode())) return;
 
-        if (getStringList("disabled-worlds").contains(player.getWorld().getName())) return;
-
-        if (getBoolean("sneak-disables") && player.isSneaking()) return;
+        if (sneakDisables && player.isSneaking()) return;
 
         ItemStack tool = player.getInventory().getItemInMainHand();
 
@@ -85,18 +159,11 @@ public class BlastEnchant extends CustomEnchant {
 
         if (!hasEnchant(tool)) return;
 
-        int radius = Math.max(1, getInt("radius"));
+        if (!disabledWorlds.isEmpty() && disabledWorlds.contains(player.getWorld().getName())) return;
 
         Block origin = e.getBlock();
 
         BlockFace miningDirection = getMiningDirection(player);
-
-        boolean damageEnabled = getBoolean("tool-damage.enabled");
-        int perBlock = Math.max(0, getInt("tool-damage.per-block"));
-        boolean unbreaking = getBoolean("tool-damage.respect-unbreaking");
-
-        boolean dropItems = getBoolean("drop-items");
-        boolean dropXp = getBoolean("drop-xp");
 
         boolean brokeAny = false;
 
@@ -127,12 +194,10 @@ public class BlastEnchant extends CustomEnchant {
 
                         if (damageEnabled && perBlock > 0) {
 
-                            if (!damageTool(tool, perBlock, unbreaking)) break outer;
+                            if (!damageTool(tool)) break outer;
                         }
 
                         int exp = extra.getExpToDrop();
-
-                        Location center = target.getLocation().add(0.5, 0.5, 0.5);
 
                         if (dropItems && extra.isDropItems()) {
                             target.breakNaturally(tool);
@@ -141,6 +206,7 @@ public class BlastEnchant extends CustomEnchant {
                         }
 
                         if (dropXp && exp > 0) {
+                            Location center = target.getLocation().add(0.5, 0.5, 0.5);
                             target.getWorld().spawn(center, ExperienceOrb.class, orb -> orb.setExperience(exp));
                         }
 
@@ -201,12 +267,12 @@ public class BlastEnchant extends CustomEnchant {
 
         if (type.getHardness() < 0) return false;
 
-        if (getStringList("blocked-blocks").contains(type.name())) return false;
+        if (blockedBlocks.contains(type)) return false;
 
-        return !(getBoolean("skip-containers") && block.getState() instanceof Container);
+        return !(skipContainers && block.getState() instanceof Container);
     }
 
-    private boolean damageTool(ItemStack tool, int perBlock, boolean respectUnbreaking) {
+    private boolean damageTool(ItemStack tool) {
 
         int maxDurability = tool.getType().getMaxDurability();
 
@@ -220,19 +286,17 @@ public class BlastEnchant extends CustomEnchant {
 
         int amount = perBlock;
 
-        if (respectUnbreaking) {
+        if (respectUnbreaking && unbreaking != null) {
 
-            Enchantment unbreakingEnchant = Enchantment.getByKey(NamespacedKey.minecraft("unbreaking"));
+            int level = tool.getEnchantmentLevel(unbreaking);
 
-            int unbreaking = unbreakingEnchant == null ? 0 : tool.getEnchantmentLevel(unbreakingEnchant);
-
-            if (unbreaking > 0) {
+            if (level > 0) {
 
                 int actual = 0;
 
                 for (int i = 0; i < perBlock; i++) {
 
-                    if (ThreadLocalRandom.current().nextInt(unbreaking + 1) == 0) actual++;
+                    if (ThreadLocalRandom.current().nextInt(level + 1) == 0) actual++;
                 }
 
                 amount = actual;
@@ -250,26 +314,12 @@ public class BlastEnchant extends CustomEnchant {
 
     private void playEffects(Block origin) {
 
+        if (particle == null && sound == null) return;
+
         Location loc = origin.getLocation().add(0.5, 0.5, 0.5);
 
-        String particleName = getString("effects.particle");
+        if (particle != null) origin.getWorld().spawnParticle(particle, loc, particleCount, 0.4, 0.4, 0.4, 0.02);
 
-        if (!particleName.equalsIgnoreCase("NONE")) {
-
-            try {
-
-                Particle particle = Particle.valueOf(particleName.toUpperCase());
-
-                origin.getWorld().spawnParticle(particle, loc, Math.max(1, getInt("effects.particle-count")), 0.4, 0.4, 0.4, 0.02);
-
-            } catch (IllegalArgumentException ignored) {
-            }
-        }
-
-        String sound = getString("effects.sound");
-
-        if (!sound.equalsIgnoreCase("NONE")) {
-            origin.getWorld().playSound(loc, sound, (float) getDouble("effects.sound-volume"), (float) getDouble("effects.sound-pitch"));
-        }
+        if (sound != null) origin.getWorld().playSound(loc, sound, soundVolume, soundPitch);
     }
 }

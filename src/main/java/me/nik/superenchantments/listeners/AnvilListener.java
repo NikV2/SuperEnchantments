@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
+@SuppressWarnings("removal")
 public class AnvilListener implements Listener {
 
     private final SuperEnchantments plugin;
@@ -31,7 +32,7 @@ public class AnvilListener implements Listener {
         ItemStack left = inv.getItem(0);
         ItemStack right = inv.getItem(1);
 
-        if (left == null || right == null || right.getType() != Material.ENCHANTED_BOOK) return;
+        if (left == null || right == null || right.getType() != this.plugin.getEnchantManager().getBookMaterial()) return;
 
         EnchantManager manager = plugin.getEnchantManager();
 

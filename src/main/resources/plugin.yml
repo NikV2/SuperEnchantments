@@ -9,8 +9,11 @@ commands:
   superenchantments:
     description: Manage SuperEnchantments.
     aliases: [ se, senchants ]
-    usage: /<command> <list|enchant|remove|book|reload>
+    usage: /<command> <list|enchant|remove|book|menu|reload>
 permissions:
   superenchantments.admin:
     description: Use the /superenchantments command.
     default: op
+  superenchantments.menu:
+    description: Open the enchantments menu.
+    default: true

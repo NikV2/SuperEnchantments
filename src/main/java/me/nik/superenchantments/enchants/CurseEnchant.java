@@ -12,16 +12,30 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class CurseEnchant extends CustomEnchant {
+
+    private double chance;
+    private int duration;
+    private int amplifier;
+
     public CurseEnchant(SuperEnchantments plugin) {
         super(plugin, "curse", "Curse", "&a", "SWORD", "AXE");
 
+        setDescription("&7A chance to inflict wither", "&7on the players you hit");
+
         addOption("chance", 40.0D, "The chance of the enchant applying");
-        addOption("duration", 5, "The effect duration");
+        addOption("duration", 60, "The effect duration (In ticks)");
         addOption("amplifier", 2, "The effect amplifier");
     }
 
+    @Override
+    protected void onLoad() {
+        chance = getDouble("chance");
+        duration = getInt("duration");
+        amplifier = getInt("amplifier");
+    }
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onBossAttack(EntityDamageByEntityEvent e) {
+    public void onAttack(EntityDamageByEntityEvent e) {
 
         if (!isEnabled()) return;
 
@@ -36,12 +50,8 @@ public class CurseEnchant extends CustomEnchant {
 
         if (!appliesTo(tool.getType()) || !hasEnchant(tool)) return;
 
-        Player targetPlayer = (Player) target;
-
-        if (RandomUtils.chance(getDouble("chance"))) {
-            targetPlayer.addPotionEffect(new PotionEffect(
-                    PotionEffectType.WITHER, getInt("duration"), getInt("amplifier"))
-            );
+        if (RandomUtils.chance(chance)) {
+            ((Player) target).addPotionEffect(new PotionEffect(PotionEffectType.WITHER, duration, amplifier));
         }
     }
 }

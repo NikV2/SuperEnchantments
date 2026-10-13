@@ -4,6 +4,7 @@ import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.files.commentedfiles.CommentedFileConfiguration;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -70,14 +71,19 @@ public class Config {
     public enum Setting {
 
         BOOKS("books", "", "Enchant Book Settings"),
-        BOOKS_NAME_FORMAT("books.name-format", "&b%name% Book", "The display name of the enchant books", "%name% = the enchant display name"),
+        BOOKS_NAME("books.name", "&bEnchanted Book", "The display name of the custom enchantment books"),
         BOOKS_MATERIAL("books.material", "BOOK", "The material to use for custom enchantment books"),
+        BOOKS_GLOW("books.glow", true, "Should the custom enchantment book glow?"),
+        BOOKS_LORE("books.lore", Arrays.asList(
+                "",
+                "%description%",
+                "",
+                "&6Applies to: &a%applicable%"
+        ), "The lore of the custom enchantment book", "NOTE: The name of the enchantment will always show first", "Placeholders: %description%, %applicable%"),
 
         ANVIL("anvil", "", "Anvil Settings"),
         ANVIL_ENABLED("anvil.enabled", true, "Should players be able to apply enchant books to tools in an anvil?"),
-        ANVIL_COST("anvil.cost", 5, "The XP level cost of applying an enchant in the anvil"),
-
-        ENCHANTS("enchants", "", "Enchant Settings", "Every enchant adds its own section below when it gets registered");
+        ANVIL_COST("anvil.cost", 5, "The XP level cost of applying an enchant in the anvil");
 
         private final String key;
         private final Object defaultValue;

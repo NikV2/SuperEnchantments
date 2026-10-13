@@ -5,6 +5,7 @@ import me.nik.superenchantments.commands.SubCommand;
 import me.nik.superenchantments.enums.Permissions;
 import me.nik.superenchantments.enchants.CustomEnchant;
 import me.nik.superenchantments.enums.MsgType;
+import me.nik.superenchantments.utils.ChatUtils;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -54,7 +55,7 @@ public class ListCommand extends SubCommand {
         for (CustomEnchant enchant : plugin.getEnchantManager().getAll()) {
             sender.sendMessage(MsgType.LIST_ENTRY.getMessage()
                     .replace("%enchant%", enchant.getDisplayName())
-                    .replace("%state%", enchant.isEnabled() ? "&aenabled" : "&cdisabled"));
+                    .replace("%state%", ChatUtils.format(enchant.isEnabled() ? "&aenabled" : "&cdisabled")));
         }
     }
 

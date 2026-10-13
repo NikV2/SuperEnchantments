@@ -20,6 +20,25 @@ public final class ChatUtils {
         return ChatColor.stripColor(STRIP_COLOR_PATTERN.matcher(input).replaceAll(""));
     }
 
+    public static String plain(final String input) {
+
+        StringBuilder builder = new StringBuilder(input.length());
+
+        for (int i = 0; i < input.length(); i++) {
+
+            char c = input.charAt(i);
+
+            if ((c == '&' || c == '\u00a7') && i + 1 < input.length() && "0123456789abcdefklmnorxABCDEFKLMNORX".indexOf(input.charAt(i + 1)) != -1) {
+                i++;
+                continue;
+            }
+
+            builder.append(c);
+        }
+
+        return builder.toString().trim();
+    }
+
     public static void log(final String... messages) {
         for (String msg : messages) {
             if (msg != null) {

@@ -1,7 +1,8 @@
 package me.nik.superenchantments.enums;
 
 public enum Permissions {
-    ADMIN("superenchantments.admin");
+    ADMIN("superenchantments.admin"),
+    MENU("superenchantments.menu");
 
     private final String permission;
 

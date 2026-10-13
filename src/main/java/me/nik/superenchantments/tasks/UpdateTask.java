@@ -1,20 +1,32 @@
 package me.nik.superenchantments.tasks;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class UpdateTask extends BukkitRunnable {
 
-    private static final List<Runnable> updates = new ArrayList<>();
+    private final List<Consumer<Player>> updaters = new ArrayList<>();
 
     @Override
     public void run() {
-        updates.forEach(Runnable::run);
+
+        if (updaters.isEmpty()) return;
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            for (Consumer<Player> updater : updaters) updater.accept(player);
+        }
     }
 
-    public static void add(Runnable runnable) {
-        updates.add(runnable);
+    public void add(Consumer<Player> updater) {
+        updaters.add(updater);
+    }
+
+    public void clear() {
+        updaters.clear();
     }
 }

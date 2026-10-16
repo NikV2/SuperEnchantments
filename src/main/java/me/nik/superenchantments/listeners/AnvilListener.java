@@ -1,9 +1,10 @@
 package me.nik.superenchantments.listeners;
 
 import me.nik.superenchantments.SuperEnchantments;
-import me.nik.superenchantments.enchants.CustomEnchant;
+import me.nik.superenchantments.enchants.categories.CustomEnchant;
 import me.nik.superenchantments.files.Config;
 import me.nik.superenchantments.managers.EnchantManager;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -40,7 +41,7 @@ public class AnvilListener implements Listener {
 
         if (onBook.isEmpty()) return;
 
-        if ((onBook.size() + 1) > Config.Setting.ANVIL_LIMIT.getInt()) return;
+        if (manager.getEnchantsOn(left).size() >= Config.Setting.ANVIL_LIMIT.getInt()) return;
 
         ItemStack base = e.getResult();
 

@@ -1,4 +1,4 @@
-package me.nik.superenchantments.enchants;
+package me.nik.superenchantments.enchants.categories;
 
 import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.files.commentedfiles.CommentedFileConfiguration;
@@ -107,7 +107,7 @@ public abstract class CustomEnchant implements Listener {
 
         enabled = getBoolean("enabled");
         displayName = getString("display-name");
-        plainName = ChatUtils.plain(displayName);
+        plainName = ChatUtils.plain(ChatUtils.format(displayName));
         loreLine = ChatUtils.format(getString("lore-color") + displayName);
         appliesTo = getStringList("applies-to");
 

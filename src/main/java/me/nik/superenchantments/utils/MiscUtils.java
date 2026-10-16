@@ -2,10 +2,13 @@ package me.nik.superenchantments.utils;
 
 import org.bukkit.Effect;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -44,6 +47,33 @@ public final class MiscUtils {
         }
 
         return config;
+    }
+
+    public static boolean isMelee(EntityDamageByEntityEvent e) {
+        return e.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK || e.getCause() == EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK;
+    }
+
+    public static void ignoreMitigation(EntityDamageEvent e, double portion) {
+
+        double base = e.getDamage();
+        double damage = e.getFinalDamage();
+
+        if (damage <= 0.0D || damage >= base) return;
+
+        double ignored = Math.max(0.0D, Math.min(1.0D, portion));
+
+        e.setDamage(base * ((damage + (base - damage) * ignored) / damage));
+    }
+
+    public static Particle getParticle(String name) {
+
+        if (name.equalsIgnoreCase("NONE")) return null;
+
+        try {
+            return Particle.valueOf(name.toUpperCase(Locale.ROOT));
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 
     public static ItemStack makeItem(Material material, String displayName, List<String> lore) {

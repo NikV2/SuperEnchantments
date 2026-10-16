@@ -1,4 +1,4 @@
-package me.nik.superenchantments.enchants;
+package me.nik.superenchantments.enchants.categories;
 
 import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.utils.TaskUtils;

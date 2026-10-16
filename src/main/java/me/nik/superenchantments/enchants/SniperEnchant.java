@@ -1,6 +1,7 @@
 package me.nik.superenchantments.enchants;
 
 import me.nik.superenchantments.SuperEnchantments;
+import me.nik.superenchantments.enchants.categories.CustomEnchant;
 import org.bukkit.Location;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;

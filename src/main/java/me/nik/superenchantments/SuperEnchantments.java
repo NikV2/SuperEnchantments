@@ -1,18 +1,27 @@
 package me.nik.superenchantments;
 
 import me.nik.superenchantments.commands.CommandManager;
+import me.nik.superenchantments.enchants.AegisEnchant;
 import me.nik.superenchantments.enchants.BlastEnchant;
+import me.nik.superenchantments.enchants.ChargeEnchant;
 import me.nik.superenchantments.enchants.CurseEnchant;
 import me.nik.superenchantments.enchants.DodgeEnchant;
+import me.nik.superenchantments.enchants.ExecutionerEnchant;
+import me.nik.superenchantments.enchants.FrostbiteEnchant;
 import me.nik.superenchantments.enchants.GlowEnchant;
+import me.nik.superenchantments.enchants.JuggernautEnchant;
 import me.nik.superenchantments.enchants.LifestealEnchant;
 import me.nik.superenchantments.enchants.LumberjackEnchant;
+import me.nik.superenchantments.enchants.PenetrationEnchant;
+import me.nik.superenchantments.enchants.PiercingSoulEnchant;
+import me.nik.superenchantments.enchants.RegenerationEnchant;
 import me.nik.superenchantments.enchants.RejuvenationEnchant;
 import me.nik.superenchantments.enchants.SniperEnchant;
 import me.nik.superenchantments.enchants.StrikeEnchant;
 import me.nik.superenchantments.enchants.SwiftEnchant;
 import me.nik.superenchantments.enchants.TelepathyEnchant;
 import me.nik.superenchantments.enchants.ThunderEnchant;
+import me.nik.superenchantments.enchants.WindburstEnchant;
 import me.nik.superenchantments.files.Config;
 import me.nik.superenchantments.files.Enchantments;
 import me.nik.superenchantments.files.Lang;
@@ -80,7 +89,16 @@ public class SuperEnchantments extends JavaPlugin {
                 new ThunderEnchant(this),
                 new RejuvenationEnchant(this),
                 new TelepathyEnchant(this),
-                new LumberjackEnchant(this)
+                new LumberjackEnchant(this),
+                new AegisEnchant(this),
+                new ChargeEnchant(this),
+                new ExecutionerEnchant(this),
+                new FrostbiteEnchant(this),
+                new JuggernautEnchant(this),
+                new PenetrationEnchant(this),
+                new PiercingSoulEnchant(this),
+                new RegenerationEnchant(this),
+                new WindburstEnchant(this)
         );
         ChatUtils.log(this.enchantManager.getAll().size() + " enchants have been loaded in " + test.getMillis() + "ms");
 

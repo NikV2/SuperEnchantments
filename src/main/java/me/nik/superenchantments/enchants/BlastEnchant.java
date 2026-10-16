@@ -1,6 +1,7 @@
 package me.nik.superenchantments.enchants;
 
 import me.nik.superenchantments.SuperEnchantments;
+import me.nik.superenchantments.enchants.categories.CustomEnchant;
 import me.nik.superenchantments.utils.MiscUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -18,8 +19,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -28,7 +27,6 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class BlastEnchant extends CustomEnchant {
 
@@ -53,7 +51,7 @@ public class BlastEnchant extends CustomEnchant {
     private Set<Material> blockedBlocks = EnumSet.noneOf(Material.class);
 
     public BlastEnchant(SuperEnchantments plugin) {
-        super(plugin, "blast", "Blast", "&a", "PICKAXE");
+        super(plugin, "blast", "Blast", "&a", "PICKAXE", "SHOVEL");
 
         setDescription("&7Mines the blocks around the one you break", "&7and digs deeper the higher the radius is");
 

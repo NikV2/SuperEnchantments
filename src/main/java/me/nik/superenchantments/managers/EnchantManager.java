@@ -1,7 +1,7 @@
 package me.nik.superenchantments.managers;
 
 import me.nik.superenchantments.SuperEnchantments;
-import me.nik.superenchantments.enchants.CustomEnchant;
+import me.nik.superenchantments.enchants.categories.CustomEnchant;
 import me.nik.superenchantments.files.Config;
 import me.nik.superenchantments.utils.ChatUtils;
 import me.nik.superenchantments.utils.MiscUtils;

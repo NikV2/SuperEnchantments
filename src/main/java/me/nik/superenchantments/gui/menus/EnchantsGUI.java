@@ -1,7 +1,7 @@
 package me.nik.superenchantments.gui.menus;
 
 import me.nik.superenchantments.SuperEnchantments;
-import me.nik.superenchantments.enchants.CustomEnchant;
+import me.nik.superenchantments.enchants.categories.CustomEnchant;
 import me.nik.superenchantments.enums.MsgType;
 import me.nik.superenchantments.enums.Permissions;
 import me.nik.superenchantments.gui.PaginatedMenu;

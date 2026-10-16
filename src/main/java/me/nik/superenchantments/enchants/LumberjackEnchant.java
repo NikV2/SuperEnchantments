@@ -1,6 +1,7 @@
 package me.nik.superenchantments.enchants;
 
 import me.nik.superenchantments.SuperEnchantments;
+import me.nik.superenchantments.enchants.categories.CustomEnchant;
 import me.nik.superenchantments.utils.MiscUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;

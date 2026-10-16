@@ -3,7 +3,7 @@ package me.nik.superenchantments.commands.subcommands;
 import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.commands.SubCommand;
 import me.nik.superenchantments.enums.Permissions;
-import me.nik.superenchantments.enchants.CustomEnchant;
+import me.nik.superenchantments.enchants.categories.CustomEnchant;
 import me.nik.superenchantments.enums.MsgType;
 import me.nik.superenchantments.utils.ChatUtils;
 import org.bukkit.command.CommandSender;

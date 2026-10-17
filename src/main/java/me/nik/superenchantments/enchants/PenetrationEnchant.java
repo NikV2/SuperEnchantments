@@ -28,7 +28,7 @@ public class PenetrationEnchant extends CustomEnchant {
 
         addOption("chance", 20.0D, "The chance of the enchant applying");
         addOption("extra_damage", 3.0D, "The extra damage dealt when the enchant applies");
-        addOption("armor_ignore", 25.0D, "The percent of the armor and other damage reduction that gets ignored", "100 ignores all of it");
+        addOption("armor_ignore", 30.0D, "The percent of the armor and other damage reduction that gets ignored", "100 ignores all of it");
         addOption("particle", "CRIT", "NONE to disable", "Particle names depend on the server version");
         addOption("particle_count", 15, "The amount of particles");
     }

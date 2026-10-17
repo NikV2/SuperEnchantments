@@ -31,8 +31,8 @@ public class RegenerationEnchant extends ArmorEnchant {
 
         addOption("chance", 25.0D, "The chance of the enchant applying");
         addOption("duration", 5, "The seconds the regeneration lasts");
-        addOption("amplifier", 1, "The effect amplifier", "1 is Regeneration II");
-        addOption("cooldown", 30, "The seconds before the enchant can apply again");
+        addOption("amplifier", 4, "The effect amplifier", "1 is Regeneration II");
+        addOption("cooldown", 20, "The seconds before the enchant can apply again");
     }
 
     @Override

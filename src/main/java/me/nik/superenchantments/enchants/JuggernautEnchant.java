@@ -30,8 +30,8 @@ public class JuggernautEnchant extends ArmorEnchant {
 
         addOption("damage_reduction", 3.0D, "The percent of damage reduced for every enchanted armor piece");
         addOption("max_damage_reduction", 12.0D, "The maximum percent of damage that can be reduced");
-        addOption("knockback_reduction", 15.0D, "The percent of knockback reduced for every enchanted armor piece");
-        addOption("max_knockback_reduction", 60.0D, "The maximum percent of knockback that can be reduced");
+        addOption("knockback_reduction", 7.5D, "The percent of knockback reduced for every enchanted armor piece");
+        addOption("max_knockback_reduction", 30.0D, "The maximum percent of knockback that can be reduced");
     }
 
     @Override
@@ -71,7 +71,7 @@ public class JuggernautEnchant extends ArmorEnchant {
 
         if (knockback == null || System.currentTimeMillis() - knockback.time > 250L) return;
 
-        e.setVelocity(e.getVelocity().multiply(1.0D - knockback.factor));
+        e.setVelocity(e.getPlayer().getVelocity().multiply(1.0D - knockback.factor));
     }
 
     @EventHandler

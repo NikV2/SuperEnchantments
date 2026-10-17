@@ -41,7 +41,7 @@ public class Lang {
     }
 
     public void addDefaults() {
-        get().addDefault("prefix", "&#00C9FF&lS&#09CCF9&lu&#11CFF3&lp&#1AD2EE&le&#22D5E8&lr&#2BD9E2&lE&#34DCDC&ln&#3CDFD7&lc&#45E2D1&lh&#4DE5CB&la&#56E8C5&ln&#5EEBC0&lt&#67EEBA&lm&#70F2B4&le&#78F5AE&ln&#81F8A9&lt&#89FBA3&ls&#92FE9D&l &f»&r ");
+        get().addDefault("prefix", "&#00C9FF&lS&#09CCF9&lu&#11CFF3&lp&#1AD2EE&le&#22D5E8&lr&#2BD9E2&lE&#34DCDC&ln&#3CDFD7&lc&#45E2D1&lh&#4DE5CB&la&#56E8C5&ln&#5EEBC0&lt&#67EEBA&lm&#70F2B4&le&#78F5AE&ln&#81F8A9&lt&#89FBA3&ls&#92FE9D&l &f&l»&r ");
         get().addDefault("no_perm", "&cYou do not have permission to do that!");
         get().addDefault("reloaded", "&fYou have successfully reloaded the plugin!");
         get().addDefault("console_commands", "&c&lYou cannot run this command through the console!");

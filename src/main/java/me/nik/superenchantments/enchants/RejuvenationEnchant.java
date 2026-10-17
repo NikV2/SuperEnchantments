@@ -34,9 +34,9 @@ public class RejuvenationEnchant extends CustomEnchant {
         setDescription("&7Slowly restores health and hunger", "&7while you are out of combat");
 
         addOption("restore", "BOTH", "What gets restored", "HEALTH, HUNGER or BOTH");
-        addOption("health_amount", 1.0D, "The health restored each time", "1.0 is half a heart");
-        addOption("hunger_amount", 1, "The hunger restored each time", "1 is half a drumstick");
-        addOption("interval", 5, "The seconds between each restore");
+        addOption("health_amount", 2.0D, "The health restored each time", "1.0 is half a heart");
+        addOption("hunger_amount", 2, "The hunger restored each time", "1 is half a drumstick");
+        addOption("interval", 3, "The seconds between each restore");
         addOption("combat_timeout", 10, "The seconds without fighting before the enchant starts working");
 
         plugin.getUpdateTask().add(this::updatePlayer);

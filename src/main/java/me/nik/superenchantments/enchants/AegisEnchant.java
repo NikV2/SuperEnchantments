@@ -48,7 +48,7 @@ public class AegisEnchant extends ArmorEnchant {
         addOption("chance", 20.0D, "The chance of the shield appearing when you take damage");
         addOption("absorption", 8.0D, "The damage the shield can absorb");
         addOption("duration", 10, "The seconds the shield lasts");
-        addOption("cooldown", 40, "The seconds before a new shield can appear", "It starts when the shield appears");
+        addOption("cooldown", 30, "The seconds before a new shield can appear", "It starts when the shield appears");
         addOption("display", "&b&lAegis &7[%bar%&7] &f%amount%&7/&f%max% &8- &f%time%s", "Shown in the action bar while the shield is active", "Placeholders: %bar%, %amount%, %max%, %time%", "Leave it empty to disable");
         addOption("break_message", "&c&lYour Aegis shield broke", "Shown when the shield is used up", "Leave it empty to disable");
         addOption("expire_message", "&7Your Aegis shield faded", "Shown when the shield runs out of time", "Leave it empty to disable");

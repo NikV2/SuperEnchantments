@@ -15,7 +15,7 @@ public class SwiftEnchant extends ArmorEffectEnchant {
 
         setDescription("&7Gives you speed", "&7while the boots are worn");
 
-        addOption("amplifier", 2, "The effect amplifier");
+        addOption("amplifier", 1, "The effect amplifier");
     }
 
     @Override

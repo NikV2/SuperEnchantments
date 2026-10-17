@@ -16,11 +16,11 @@ public class LifestealEnchant extends CustomEnchant {
     private double chance;
 
     public LifestealEnchant(SuperEnchantments plugin) {
-        super(plugin, "lifesteal", "LifeSteal", "&a", "SWORD", "AXE");
+        super(plugin, "lifesteal", "LifeSteal", "&a", "SWORD", "AXE", "TRIDENT", "SPEAR", "MACE");
 
         setDescription("&7A chance to steal health", "&7from the things you hit");
 
-        addOption("chance", 20.0D, "The chance of the enchant applying");
+        addOption("chance", 50.0D, "The chance of the enchant applying");
     }
 
     @Override

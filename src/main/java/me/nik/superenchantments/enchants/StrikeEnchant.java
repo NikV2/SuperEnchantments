@@ -11,10 +11,19 @@ import org.bukkit.inventory.ItemStack;
 
 public class StrikeEnchant extends CustomEnchant {
 
+    private double multiplier;
+
     public StrikeEnchant(SuperEnchantments plugin) {
         super(plugin, "strike", "Strike", "&a", "SWORD", "AXE");
 
         setDescription("&7Deals more damage", "&7the more health you are missing");
+
+        addOption("multiplier", 0.5, "The multiplier of the missing health", "Max: 1.0");
+    }
+
+    @Override
+    protected void onLoad() {
+        multiplier = getDouble("multiplier");
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -32,7 +41,7 @@ public class StrikeEnchant extends CustomEnchant {
 
         if (!appliesTo(tool.getType()) || !hasEnchant(tool)) return;
 
-        double missingHealth = player.getMaxHealth() - player.getHealth();
+        double missingHealth = (player.getMaxHealth() - player.getHealth()) * multiplier;
 
         e.setDamage(e.getDamage() + missingHealth);
     }

@@ -23,7 +23,7 @@ public class CurseEnchant extends CustomEnchant {
 
         setDescription("&7A chance to inflict wither", "&7on the players you hit");
 
-        addOption("chance", 40.0D, "The chance of the enchant applying");
+        addOption("chance", 20.0D, "The chance of the enchant applying");
         addOption("duration", 60, "The effect duration (In ticks)");
         addOption("amplifier", 2, "The effect amplifier");
     }

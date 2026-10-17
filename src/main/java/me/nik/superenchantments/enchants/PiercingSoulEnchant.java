@@ -25,7 +25,7 @@ public class PiercingSoulEnchant extends CustomEnchant {
 
         setDescription("&7Your arrows ignore part of the armor", "&7and defenses of whatever they hit");
 
-        addOption("max_penetration", 25.0D, "The maximum percent of armor and other damage reduction an arrow ignores", "A fully drawn bow reaches the maximum, a weaker shot ignores less");
+        addOption("max_penetration", 20.0D, "The maximum percent of armor and other damage reduction an arrow ignores", "A fully drawn bow reaches the maximum, a weaker shot ignores less");
     }
 
     @Override

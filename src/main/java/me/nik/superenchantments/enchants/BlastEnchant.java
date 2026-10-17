@@ -80,7 +80,7 @@ public class BlastEnchant extends CustomEnchant {
         addOption("effects.particle", "CLOUD", "NONE to disable", "Particle names depend on the server version");
         addOption("effects.particle_count", 5, "The amount of particles");
         addOption("effects.sound", "entity.generic.explode", "NONE to disable", "Use the namespaced sound key");
-        addOption("effects.sound_volume", 0.4, "The volume of the sound");
+        addOption("effects.sound_volume", 0.2, "The volume of the sound");
         addOption("effects.sound_pitch", 1.2, "The pitch of the sound");
     }
 

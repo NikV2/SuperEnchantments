@@ -16,7 +16,7 @@ import me.nik.superenchantments.enchants.PenetrationEnchant;
 import me.nik.superenchantments.enchants.PiercingSoulEnchant;
 import me.nik.superenchantments.enchants.RegenerationEnchant;
 import me.nik.superenchantments.enchants.RejuvenationEnchant;
-import me.nik.superenchantments.enchants.SniperEnchant;
+import me.nik.superenchantments.enchants.SmithingEnchant;
 import me.nik.superenchantments.enchants.StrikeEnchant;
 import me.nik.superenchantments.enchants.SwiftEnchant;
 import me.nik.superenchantments.enchants.TelepathyEnchant;
@@ -79,13 +79,13 @@ public class SuperEnchantments extends JavaPlugin {
 
         this.enchantManager.register(
                 new BlastEnchant(this),
-                new SniperEnchant(this),
                 new GlowEnchant(this),
                 new CurseEnchant(this),
                 new SwiftEnchant(this),
                 new DodgeEnchant(this),
                 new LifestealEnchant(this),
                 new StrikeEnchant(this),
+                new SmithingEnchant(this),
                 new ThunderEnchant(this),
                 new RejuvenationEnchant(this),
                 new TelepathyEnchant(this),

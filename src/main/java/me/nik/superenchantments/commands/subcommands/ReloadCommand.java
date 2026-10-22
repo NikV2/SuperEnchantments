@@ -51,6 +51,7 @@ public class ReloadCommand extends SubCommand {
         plugin.getConfiguration().setup();
         plugin.getLang().reload();
         plugin.getEnchantManager().reload();
+        plugin.getEnchanterManager().reload();
         sender.sendMessage(MsgType.RELOADED.getMessage());
     }
 

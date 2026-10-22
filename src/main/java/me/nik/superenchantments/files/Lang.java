@@ -56,5 +56,14 @@ public class Lang {
         get().addDefault("book_given", "&aGave &f%player% &aa &f%enchant% &abook.");
         get().addDefault("list_header", "&bRegistered enchants:");
         get().addDefault("list_entry", "&7- &f%enchant% &7(%state%&7)");
+        get().addDefault("enchanter_disabled", "&cThe enchanter is disabled!");
+        get().addDefault("disenchanter_disabled", "&cThe disenchanter is disabled!");
+        get().addDefault("not_enough_exp", "&cYou need &f%cost% %type% &cfor that!");
+        get().addDefault("inventory_full", "&cYour inventory is full!");
+        get().addDefault("offer_empty", "&cThere are no enchants available in that offer!");
+        get().addDefault("enchanter_bought", "&fYou bought a &r%enchant% &fbook for &b%cost% %type%&f!");
+        get().addDefault("hold_single_item", "&cHold a single item!");
+        get().addDefault("enchant_missing", "&cThat item no longer has this enchant!");
+        get().addDefault("enchant_removed", "&fRemoved &r%enchant% &ffrom your item and received its book!");
     }
 }

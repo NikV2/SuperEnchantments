@@ -7,6 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
@@ -51,6 +52,13 @@ public final class MiscUtils {
 
     public static boolean isMelee(EntityDamageByEntityEvent e) {
         return e.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK || e.getCause() == EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK;
+    }
+
+    public static void playSound(Player player, String sound) {
+
+        if (sound.isEmpty() || sound.equalsIgnoreCase("NONE")) return;
+
+        player.playSound(player.getLocation(), sound, 1.0F, 1.0F);
     }
 
     public static void ignoreMitigation(EntityDamageEvent e, double portion) {

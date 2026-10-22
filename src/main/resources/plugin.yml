@@ -7,13 +7,18 @@ authors: [ Nik ]
 description: ${project.description}
 commands:
   superenchantments:
-    description: Manage SuperEnchantments.
-    aliases: [ se, senchants ]
-    usage: /<command> <list|enchant|remove|book|menu|reload>
+    description: The main superenchantments command.
+    aliases: [ se, senchants, enchants ]
 permissions:
   superenchantments.admin:
     description: Use the /superenchantments command.
     default: op
   superenchantments.menu:
     description: Open the enchantments menu.
+    default: true
+  superenchantments.enchanter:
+    description: Open the enchanter menu.
+    default: true
+  superenchantments.disenchant:
+    description: Open the menu to remove custom enchants.
     default: true

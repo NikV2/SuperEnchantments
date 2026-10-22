@@ -84,7 +84,24 @@ public class Config {
         ANVIL("anvil", "", "Anvil Settings"),
         ANVIL_ENABLED("anvil.enabled", true, "Should players be able to apply enchant books to tools in an anvil?"),
         ANVIL_LIMIT("anvil.limit", 3, "The maximum limit of custom enchantments allowed in a single piece"),
-        ANVIL_COST("anvil.cost", 5, "The XP level cost of applying an enchant in the anvil");
+        ANVIL_COST("anvil.cost", 5, "The XP level cost of applying an enchant in the anvil"),
+
+        ENCHANTER("enchanter", "", "Enchanter Settings", "Players spend experience on a random custom enchantment book"),
+        ENCHANTER_ENABLED("enchanter.enabled", true, "Should the enchanter menu and its command work?"),
+        ENCHANTER_TITLE("enchanter.title", "&9Enchanter", "The title of the menu"),
+        ENCHANTER_ROWS("enchanter.rows", 3, "The rows of the menu", "From 1 to 6"),
+        ENCHANTER_FILLER("enchanter.filler", "GRAY_STAINED_GLASS_PANE", "The item that fills the empty slots of the menu", "NONE to leave them empty"),
+        ENCHANTER_COST_TYPE("enchanter.cost_type", "LEVELS", "What the offers cost", "LEVELS or POINTS (experience points)"),
+        ENCHANTER_SUCCESS_SOUND("enchanter.success_sound", "entity.player.levelup", "NONE to disable", "Played when a book is bought"),
+        ENCHANTER_FAIL_SOUND("enchanter.fail_sound", "entity.villager.no", "NONE to disable", "Played when a purchase fails"),
+
+        DISENCHANTER("disenchanter", "", "Disenchanter Settings", "Players remove a custom enchant from the item in their hand and get its book back"),
+        DISENCHANTER_ENABLED("disenchanter.enabled", true, "Should the disenchanter menu and its command work?"),
+        DISENCHANTER_TITLE("disenchanter.title", "&9Remove Enchantments", "The title of the menu"),
+        DISENCHANTER_COST("disenchanter.cost", 0, "What removing an enchant costs", "0 is free"),
+        DISENCHANTER_COST_TYPE("disenchanter.cost_type", "LEVELS", "LEVELS or POINTS (experience points)"),
+        DISENCHANTER_SUCCESS_SOUND("disenchanter.success_sound", "block.anvil.use", "NONE to disable", "Played when an enchant is removed"),
+        DISENCHANTER_FAIL_SOUND("disenchanter.fail_sound", "entity.villager.no", "NONE to disable", "Played when removing an enchant fails");
 
         private final String key;
         private final Object defaultValue;

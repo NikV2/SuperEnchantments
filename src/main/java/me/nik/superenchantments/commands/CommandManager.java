@@ -2,7 +2,9 @@ package me.nik.superenchantments.commands;
 
 import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.commands.subcommands.BookCommand;
+import me.nik.superenchantments.commands.subcommands.DisenchantCommand;
 import me.nik.superenchantments.commands.subcommands.EnchantCommand;
+import me.nik.superenchantments.commands.subcommands.EnchanterCommand;
 import me.nik.superenchantments.commands.subcommands.ListCommand;
 import me.nik.superenchantments.commands.subcommands.MenuCommand;
 import me.nik.superenchantments.commands.subcommands.ReloadCommand;
@@ -34,6 +36,8 @@ public class CommandManager implements TabExecutor {
         this.subCommands.add(new RemoveCommand(plugin));
         this.subCommands.add(new BookCommand(plugin));
         this.subCommands.add(new MenuCommand(plugin));
+        this.subCommands.add(new EnchanterCommand(plugin));
+        this.subCommands.add(new DisenchantCommand(plugin));
     }
 
     @Override

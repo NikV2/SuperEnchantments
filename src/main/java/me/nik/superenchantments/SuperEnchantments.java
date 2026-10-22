@@ -28,6 +28,7 @@ import me.nik.superenchantments.files.Lang;
 import me.nik.superenchantments.listeners.AnvilListener;
 import me.nik.superenchantments.listeners.GuiListener;
 import me.nik.superenchantments.managers.EnchantManager;
+import me.nik.superenchantments.managers.EnchanterManager;
 import me.nik.superenchantments.tasks.UpdateTask;
 import me.nik.superenchantments.utils.ChatUtils;
 import me.nik.superenchantments.utils.MillisTest;
@@ -52,6 +53,7 @@ public class SuperEnchantments extends JavaPlugin {
     private final UpdateTask updateTask = new UpdateTask();
 
     private EnchantManager enchantManager;
+    private EnchanterManager enchanterManager;
 
     private static SuperEnchantments instance;
 
@@ -100,6 +102,9 @@ public class SuperEnchantments extends JavaPlugin {
                 new RegenerationEnchant(this),
                 new WindburstEnchant(this)
         );
+
+        this.enchanterManager = new EnchanterManager(this);
+        this.enchanterManager.initialize();
         ChatUtils.log(this.enchantManager.getAll().size() + " enchants have been loaded in " + test.getMillis() + "ms");
 
         test.reset();
@@ -124,12 +129,17 @@ public class SuperEnchantments extends JavaPlugin {
 
         this.updateTask.clear();
         this.enchantManager.shutdown();
+        this.enchanterManager.shutdown();
 
         this.config.reset();
         this.lang.reload();
         this.lang.save();
 
         instance = null;
+    }
+
+    public EnchanterManager getEnchanterManager() {
+        return enchanterManager;
     }
 
     public EnchantManager getEnchantManager() {

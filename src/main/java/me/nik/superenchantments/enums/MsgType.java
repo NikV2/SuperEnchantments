@@ -17,6 +17,7 @@ public enum MsgType {
     REMOVED(PREFIX.getMessage() + ChatUtils.format(SuperEnchantments.getInstance().getLang().get().getString("removed"))),
     NOT_PRESENT(PREFIX.getMessage() + ChatUtils.format(SuperEnchantments.getInstance().getLang().get().getString("not_present"))),
     BOOK_GIVEN(PREFIX.getMessage() + ChatUtils.format(SuperEnchantments.getInstance().getLang().get().getString("book_given"))),
+    RANDOM_BOOK_GIVEN(PREFIX.getMessage() + ChatUtils.format(SuperEnchantments.getInstance().getLang().get().getString("random_book_given"))),
     LIST_HEADER(PREFIX.getMessage() + ChatUtils.format(SuperEnchantments.getInstance().getLang().get().getString("list_header"))),
     ENCHANTER_DISABLED(PREFIX.getMessage() + ChatUtils.format(SuperEnchantments.getInstance().getLang().get().getString("enchanter_disabled"))),
     DISENCHANTER_DISABLED(PREFIX.getMessage() + ChatUtils.format(SuperEnchantments.getInstance().getLang().get().getString("disenchanter_disabled"))),

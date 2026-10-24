@@ -2,6 +2,7 @@ package me.nik.superenchantments.enchants;
 
 import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.enchants.categories.CustomEnchant;
+import me.nik.superenchantments.enums.Rarity;
 import me.nik.superenchantments.utils.MiscUtils;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.LivingEntity;
@@ -17,7 +18,7 @@ public class ExecutionerEnchant extends CustomEnchant {
     private double bonus;
 
     public ExecutionerEnchant(SuperEnchantments plugin) {
-        super(plugin, "executioner", "Executioner", "&a", "SWORD", "AXE");
+        super(plugin, "executioner", "Executioner", "&a", Rarity.COMMON, "SWORD", "AXE");
 
         setDescription("&7Deals bonus damage to targets", "&7that are low on health");
 

@@ -27,6 +27,7 @@ import me.nik.superenchantments.files.Enchantments;
 import me.nik.superenchantments.files.Lang;
 import me.nik.superenchantments.listeners.AnvilListener;
 import me.nik.superenchantments.listeners.GuiListener;
+import me.nik.superenchantments.listeners.RandomEnchantBookListener;
 import me.nik.superenchantments.managers.EnchantManager;
 import me.nik.superenchantments.managers.EnchanterManager;
 import me.nik.superenchantments.tasks.UpdateTask;
@@ -36,6 +37,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.Arrays;
 
 public class SuperEnchantments extends JavaPlugin {
 
@@ -116,8 +119,11 @@ public class SuperEnchantments extends JavaPlugin {
         ChatUtils.log("Commands have been loaded in " + test.getMillis() + "ms");
 
         test.reset();
-        Bukkit.getPluginManager().registerEvents(new AnvilListener(this), this);
-        Bukkit.getPluginManager().registerEvents(new GuiListener(), this);
+        Arrays.asList(
+                new AnvilListener(this),
+                new GuiListener(),
+                new RandomEnchantBookListener(this)
+        ).forEach(listener -> Bukkit.getPluginManager().registerEvents(listener, this));
         ChatUtils.log("Listeners have been loaded in " + test.getMillis() + "ms");
     }
 

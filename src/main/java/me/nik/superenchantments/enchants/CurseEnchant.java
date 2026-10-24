@@ -2,6 +2,7 @@ package me.nik.superenchantments.enchants;
 
 import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.enchants.categories.CustomEnchant;
+import me.nik.superenchantments.enums.Rarity;
 import me.nik.superenchantments.utils.RandomUtils;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -19,7 +20,7 @@ public class CurseEnchant extends CustomEnchant {
     private int amplifier;
 
     public CurseEnchant(SuperEnchantments plugin) {
-        super(plugin, "curse", "Curse", "&a", "SWORD", "AXE");
+        super(plugin, "curse", "Curse", "&a", Rarity.COMMON, "SWORD", "AXE");
 
         setDescription("&7A chance to inflict wither", "&7on the players you hit");
 

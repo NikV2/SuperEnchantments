@@ -2,6 +2,7 @@ package me.nik.superenchantments.enchants;
 
 import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.enchants.categories.ArmorEffectEnchant;
+import me.nik.superenchantments.enums.Rarity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
@@ -9,7 +10,7 @@ import org.bukkit.potion.PotionEffectType;
 public class GlowEnchant extends ArmorEffectEnchant {
 
     public GlowEnchant(SuperEnchantments plugin) {
-        super(plugin, "glow", "Glow", "&a", PotionEffectType.NIGHT_VISION, "HELMET");
+        super(plugin, "glow", "Glow", "&a", Rarity.COMMON, PotionEffectType.NIGHT_VISION, "HELMET");
 
         setDescription("&7Gives you night vision", "&7while the helmet is worn");
     }

@@ -2,6 +2,7 @@ package me.nik.superenchantments.enchants;
 
 import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.enchants.categories.ArmorEffectEnchant;
+import me.nik.superenchantments.enums.Rarity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
@@ -11,7 +12,7 @@ public class SwiftEnchant extends ArmorEffectEnchant {
     private int amplifier;
 
     public SwiftEnchant(SuperEnchantments plugin) {
-        super(plugin, "swift", "Swift", "&a", PotionEffectType.SPEED, "BOOTS");
+        super(plugin, "swift", "Swift", "&a", Rarity.COMMON, PotionEffectType.SPEED, "BOOTS");
 
         setDescription("&7Gives you speed", "&7while the boots are worn");
 

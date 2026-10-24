@@ -2,6 +2,7 @@ package me.nik.superenchantments.enchants;
 
 import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.enchants.categories.CustomEnchant;
+import me.nik.superenchantments.enums.Rarity;
 import me.nik.superenchantments.utils.MiscUtils;
 import me.nik.superenchantments.utils.RandomUtils;
 import org.bukkit.Particle;
@@ -22,7 +23,7 @@ public class PenetrationEnchant extends CustomEnchant {
     private Particle particle;
 
     public PenetrationEnchant(SuperEnchantments plugin) {
-        super(plugin, "penetration", "Penetration", "&a", "SWORD");
+        super(plugin, "penetration", "Penetration", "&a", Rarity.LEGENDARY, "SWORD");
 
         setDescription("&7A chance to deal extra damage", "&7that ignores part of the target's armor");
 

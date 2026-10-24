@@ -2,6 +2,7 @@ package me.nik.superenchantments.enchants;
 
 import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.enchants.categories.CustomEnchant;
+import me.nik.superenchantments.enums.Rarity;
 import me.nik.superenchantments.utils.MiscUtils;
 import me.nik.superenchantments.utils.RandomUtils;
 import org.bukkit.NamespacedKey;
@@ -31,7 +32,7 @@ public class FrostbiteEnchant extends CustomEnchant {
     private PotionEffectType slowness;
 
     public FrostbiteEnchant(SuperEnchantments plugin) {
-        super(plugin, "frostbite", "Frostbite", "&a", "SWORD", "AXE", "BOW", "CROSSBOW");
+        super(plugin, "frostbite", "Frostbite", "&a", Rarity.COMMON, "SWORD", "AXE", "BOW", "CROSSBOW");
 
         key = new NamespacedKey(plugin, "frostbite");
 

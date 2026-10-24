@@ -2,6 +2,7 @@ package me.nik.superenchantments.enchants;
 
 import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.enchants.categories.CustomEnchant;
+import me.nik.superenchantments.enums.Rarity;
 import me.nik.superenchantments.utils.RandomUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
@@ -23,7 +24,7 @@ public class ThunderEnchant extends CustomEnchant {
     private double radius;
 
     public ThunderEnchant(SuperEnchantments plugin) {
-        super(plugin, "thunder", "Thunder", "&a", "SWORD", "AXE");
+        super(plugin, "thunder", "Thunder", "&a", Rarity.LEGENDARY, "SWORD", "AXE");
 
         setDescription("&7A chance to call lightning on your target", "&7and shock everything around it");
 

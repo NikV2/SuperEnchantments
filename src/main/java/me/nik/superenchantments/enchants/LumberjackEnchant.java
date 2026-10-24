@@ -2,6 +2,7 @@ package me.nik.superenchantments.enchants;
 
 import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.enchants.categories.CustomEnchant;
+import me.nik.superenchantments.enums.Rarity;
 import me.nik.superenchantments.utils.MiscUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -45,7 +46,7 @@ public class LumberjackEnchant extends CustomEnchant {
     private Set<GameMode> disabledGameModes = EnumSet.noneOf(GameMode.class);
 
     public LumberjackEnchant(SuperEnchantments plugin) {
-        super(plugin, "lumberjack", "Lumberjack", "&a", "AXE");
+        super(plugin, "lumberjack", "Lumberjack", "&a", Rarity.LEGENDARY, "AXE");
 
         setDescription("&7Chops connected logs at once");
 

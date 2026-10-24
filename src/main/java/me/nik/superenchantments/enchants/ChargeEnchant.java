@@ -2,6 +2,7 @@ package me.nik.superenchantments.enchants;
 
 import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.enchants.categories.CustomEnchant;
+import me.nik.superenchantments.enums.Rarity;
 import me.nik.superenchantments.utils.ChatUtils;
 import me.nik.superenchantments.utils.MiscUtils;
 import me.nik.superenchantments.utils.TaskUtils;
@@ -43,7 +44,7 @@ public class ChargeEnchant extends CustomEnchant {
     private Particle particle;
 
     public ChargeEnchant(SuperEnchantments plugin) {
-        super(plugin, "charge", "Charge", "&a", "SWORD", "AXE");
+        super(plugin, "charge", "Charge", "&a", Rarity.RARE, "SWORD", "AXE");
 
         setDescription("&7Consecutive hits build up rage", "&7and the next hit after a full charge", "&7releases a powerful blast");
 

@@ -2,6 +2,7 @@ package me.nik.superenchantments.enchants;
 
 import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.enchants.categories.CustomEnchant;
+import me.nik.superenchantments.enums.Rarity;
 import me.nik.superenchantments.utils.RandomUtils;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -16,7 +17,7 @@ public class LifestealEnchant extends CustomEnchant {
     private double chance;
 
     public LifestealEnchant(SuperEnchantments plugin) {
-        super(plugin, "lifesteal", "LifeSteal", "&a", "SWORD", "AXE", "TRIDENT", "SPEAR", "MACE");
+        super(plugin, "lifesteal", "LifeSteal", "&a", Rarity.LEGENDARY, "SWORD", "AXE", "TRIDENT", "SPEAR", "MACE");
 
         setDescription("&7A chance to steal health", "&7from the things you hit");
 

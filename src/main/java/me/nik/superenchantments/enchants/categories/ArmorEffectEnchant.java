@@ -1,6 +1,7 @@
 package me.nik.superenchantments.enchants.categories;
 
 import me.nik.superenchantments.SuperEnchantments;
+import me.nik.superenchantments.enums.Rarity;
 import me.nik.superenchantments.utils.TaskUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -25,8 +26,8 @@ public abstract class ArmorEffectEnchant extends CustomEnchant {
 
     private final PotionEffectType effect;
 
-    protected ArmorEffectEnchant(SuperEnchantments plugin, String id, String displayName, String loreColor, PotionEffectType effect, String... appliesTo) {
-        super(plugin, id, displayName, loreColor, appliesTo);
+    protected ArmorEffectEnchant(SuperEnchantments plugin, String id, String displayName, String loreColor, Rarity rarity, PotionEffectType effect, String... appliesTo) {
+        super(plugin, id, displayName, loreColor, rarity, appliesTo);
         this.effect = effect;
 
         plugin.getUpdateTask().add(this::updatePlayer);

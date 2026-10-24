@@ -2,20 +2,28 @@ package me.nik.superenchantments.managers;
 
 import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.enchants.categories.CustomEnchant;
+import me.nik.superenchantments.enums.Rarity;
 import me.nik.superenchantments.files.Config;
 import me.nik.superenchantments.files.commentedfiles.CommentedFileConfiguration;
 import me.nik.superenchantments.utils.ChatUtils;
 import me.nik.superenchantments.utils.ExpUtils;
+import me.nik.superenchantments.utils.MiscUtils;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 public class EnchanterManager implements AbstractManager {
 
@@ -26,6 +34,8 @@ public class EnchanterManager implements AbstractManager {
     private boolean levels = true;
     private Material filler;
 
+    private ItemStack randomEnchantItem;
+
     public EnchanterManager(SuperEnchantments plugin) {
         this.plugin = plugin;
     }
@@ -33,6 +43,7 @@ public class EnchanterManager implements AbstractManager {
     @Override
     public void initialize() {
         load();
+        loadRandomEnchantItem();
     }
 
     @Override
@@ -42,6 +53,7 @@ public class EnchanterManager implements AbstractManager {
 
     public void reload() {
         load();
+        loadRandomEnchantItem();
     }
 
     public boolean isLevels() {
@@ -64,6 +76,111 @@ public class EnchanterManager implements AbstractManager {
 
         for (Offer offer : offers) {
             if (offer.slot == slot) return offer;
+        }
+
+        return null;
+    }
+
+    private void loadRandomEnchantItem() {
+
+        Material material = Material.matchMaterial(Config.Setting.RANDOM_ENCHANTMENT_BOOK_MATERIAL.getString());
+
+        if (material == null || material.isAir() || !material.isItem()) {
+
+            ChatUtils.log("Invalid book material, using BOOK");
+
+            material = Material.BOOK;
+        }
+
+        ItemStack book = new ItemStack(material);
+
+        ItemMeta meta = book.getItemMeta();
+
+        meta.setDisplayName(ChatUtils.format(Config.Setting.RANDOM_ENCHANTMENT_BOOK_NAME.getString()));
+
+        List<String> lore = Config.Setting.RANDOM_ENCHANTMENT_BOOK_LORE.getStringList();
+
+        if (lore != null && !lore.isEmpty()) {
+
+            List<String> itemLore = meta.hasLore() ? meta.getLore() : new ArrayList<>();
+
+            for (String value : lore) {
+                itemLore.add(ChatUtils.format(value
+                        .replace("%common_chance%", (Config.Setting.RANDOM_ENCHANTMENT_BOOK_COMMON_CHANCE.getDouble() + "%"))
+                        .replace("%rare_chance%", (Config.Setting.RANDOM_ENCHANTMENT_BOOK_RARE_CHANCE.getDouble() + "%"))
+                        .replace("%legendary_chance%", (Config.Setting.RANDOM_ENCHANTMENT_BOOK_LEGENDARY_CHANCE.getDouble() + "%"))
+                ));
+            }
+
+            meta.setLore(itemLore);
+        }
+
+        if (Config.Setting.RANDOM_ENCHANTMENT_BOOK_GLOW.getBoolean() && !meta.hasEnchants()) {
+
+            //Apply by using both methods due to 1.8 -> Latest.
+            book.addUnsafeEnchantment(MiscUtils.UNBREAKING, 1);
+            meta.addEnchant(MiscUtils.UNBREAKING, 1, true);
+
+            //Hide them while keeping the glow effect.
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        }
+
+        book.setItemMeta(meta);
+
+        randomEnchantItem = book;
+    }
+
+    public CustomEnchant getRandomCustomEnchant() {
+
+        Collection<CustomEnchant> enchants = plugin.getEnchantManager().getAll();
+
+        Map<Rarity, List<CustomEnchant>> grouped = new EnumMap<>(Rarity.class);
+
+        for (CustomEnchant enchant : enchants) {
+            if (enchant == null || !enchant.isEnabled() || enchant.getRarity() == null) {
+                continue;
+            }
+
+            grouped.computeIfAbsent(enchant.getRarity(), rarity -> new ArrayList<>()).add(enchant);
+        }
+
+        Map<Rarity, Double> weights = new EnumMap<>(Rarity.class);
+        weights.put(Rarity.LEGENDARY, Config.Setting.RANDOM_ENCHANTMENT_BOOK_LEGENDARY_CHANCE.getDouble());
+        weights.put(Rarity.RARE, Config.Setting.RANDOM_ENCHANTMENT_BOOK_RARE_CHANCE.getDouble());
+        weights.put(Rarity.COMMON, Config.Setting.RANDOM_ENCHANTMENT_BOOK_COMMON_CHANCE.getDouble());
+
+        double totalWeight = 0.0D;
+
+        for (Map.Entry<Rarity, List<CustomEnchant>> entry : grouped.entrySet()) {
+            Double weight = weights.get(entry.getKey());
+
+            if (weight != null && weight > 0.0D && !entry.getValue().isEmpty()) {
+                totalWeight += weight;
+            }
+        }
+
+        if (totalWeight <= 0.0D) {
+            return null;
+        }
+
+        double roll = ThreadLocalRandom.current().nextDouble(totalWeight);
+
+        for (Map.Entry<Rarity, List<CustomEnchant>> entry : grouped.entrySet()) {
+            Double weight = weights.get(entry.getKey());
+
+            if (weight == null || weight <= 0.0D || entry.getValue().isEmpty()) {
+                continue;
+            }
+
+            roll -= weight;
+
+            if (roll < 0.0D) {
+                List<CustomEnchant> candidates = entry.getValue();
+
+                return candidates.get(
+                        ThreadLocalRandom.current().nextInt(candidates.size())
+                );
+            }
         }
 
         return null;
@@ -145,15 +262,19 @@ public class EnchanterManager implements AbstractManager {
 
         config.set("enchanter.offers", "", "The offers of the enchanter", "Every section is an offer, copy one and rename it to add another");
 
-        writeOffer(config, "common", 11, "BOOK", "&a&lCommon Enchantment", 15, new ArrayList<>(), true);
+        Collection<CustomEnchant> customEnchants = plugin.getEnchantManager().getAll();
 
-        writeOffer(config, "rare", 13, "BOOK", "&9&lRare Enchantment", 30, Arrays.asList(
-                "charge", "juggernaut", "penetration", "piercingsoul", "executioner", "windburst"
-        ), false);
+        writeOffer(config, "common", 11, "BOOK", "&a&lCommon Enchantment", 15,
+                customEnchants.stream().filter(ce -> ce.getRarity() == Rarity.COMMON).map(CustomEnchant::getId).collect(Collectors.toList()),
+                true);
 
-        writeOffer(config, "legendary", 15, "BOOK", "&6&lLegendary Enchantment", 50, Arrays.asList(
-                "blast", "lumberjack", "thunder", "aegis"
-        ), false);
+        writeOffer(config, "rare", 13, "BOOK", "&9&lRare Enchantment", 30,
+                customEnchants.stream().filter(ce -> ce.getRarity() == Rarity.RARE).map(CustomEnchant::getId).collect(Collectors.toList()),
+                false);
+
+        writeOffer(config, "legendary", 15, "BOOK", "&6&lLegendary Enchantment", 50,
+                customEnchants.stream().filter(ce -> ce.getRarity() == Rarity.LEGENDARY).map(CustomEnchant::getId).collect(Collectors.toList()),
+                false);
     }
 
     private void writeOffer(CommentedFileConfiguration config, String id, int slot, String material, String name, int cost, List<String> enchants, boolean comment) {
@@ -206,6 +327,10 @@ public class EnchanterManager implements AbstractManager {
         }
 
         return pool;
+    }
+
+    public ItemStack getRandomEnchantItem() {
+        return randomEnchantItem == null ? new ItemStack(Material.BOOK) : randomEnchantItem;
     }
 
     public int available(Offer offer) {

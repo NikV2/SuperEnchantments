@@ -2,6 +2,7 @@ package me.nik.superenchantments.enchants;
 
 import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.enchants.categories.CustomEnchant;
+import me.nik.superenchantments.enums.Rarity;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -29,7 +30,7 @@ public class RejuvenationEnchant extends CustomEnchant {
     private long combatMillis;
 
     public RejuvenationEnchant(SuperEnchantments plugin) {
-        super(plugin, "rejuvenation", "Rejuvenation", "&a", "HELMET", "CHESTPLATE", "LEGGINGS", "BOOTS");
+        super(plugin, "rejuvenation", "Rejuvenation", "&a", Rarity.COMMON, "HELMET", "CHESTPLATE", "LEGGINGS", "BOOTS");
 
         setDescription("&7Slowly restores health and hunger", "&7while you are out of combat");
 

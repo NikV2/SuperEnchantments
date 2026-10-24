@@ -2,6 +2,7 @@ package me.nik.superenchantments.enchants;
 
 import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.enchants.categories.CustomEnchant;
+import me.nik.superenchantments.enums.Rarity;
 import org.bukkit.Location;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -20,7 +21,7 @@ public class TelepathyEnchant extends CustomEnchant {
     private float soundVolume;
 
     public TelepathyEnchant(SuperEnchantments plugin) {
-        super(plugin, "telepathy", "Telepathy", "&a", "PICKAXE", "AXE", "SHOVEL");
+        super(plugin, "telepathy", "Telepathy", "&a", Rarity.RARE, "PICKAXE", "AXE", "SHOVEL");
 
         setDescription("&7Mined drops go straight into your inventory");
 

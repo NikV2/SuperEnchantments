@@ -54,6 +54,7 @@ public class Lang {
         get().addDefault("removed", "&aRemoved &f%enchant% &afrom your item.");
         get().addDefault("not_present", "&cThat item doesn't have %enchant%.");
         get().addDefault("book_given", "&aGave &f%player% &aa &f%enchant% &abook.");
+        get().addDefault("random_book_given", "&aGave &f%player% &aa &fRandom Enchantment Book.");
         get().addDefault("list_header", "&bRegistered enchants:");
         get().addDefault("list_entry", "&7- &f%enchant% &7(%state%&7)");
         get().addDefault("enchanter_disabled", "&cThe enchanter is disabled!");

@@ -2,6 +2,7 @@ package me.nik.superenchantments.enchants;
 
 import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.enchants.categories.CustomEnchant;
+import me.nik.superenchantments.enums.Rarity;
 import me.nik.superenchantments.utils.MiscUtils;
 import me.nik.superenchantments.utils.RandomUtils;
 import me.nik.superenchantments.utils.TaskUtils;
@@ -39,7 +40,7 @@ public class WindburstEnchant extends CustomEnchant {
     private Particle particle;
 
     public WindburstEnchant(SuperEnchantments plugin) {
-        super(plugin, "windburst", "Windburst", "&a", "SWORD", "AXE", "BOW", "CROSSBOW");
+        super(plugin, "windburst", "Windburst", "&a", Rarity.RARE, "SWORD", "AXE", "BOW", "CROSSBOW");
 
         key = new NamespacedKey(plugin, "windburst");
 

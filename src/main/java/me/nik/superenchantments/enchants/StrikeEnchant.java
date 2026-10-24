@@ -2,6 +2,7 @@ package me.nik.superenchantments.enchants;
 
 import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.enchants.categories.CustomEnchant;
+import me.nik.superenchantments.enums.Rarity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,7 +15,7 @@ public class StrikeEnchant extends CustomEnchant {
     private double multiplier;
 
     public StrikeEnchant(SuperEnchantments plugin) {
-        super(plugin, "strike", "Strike", "&a", "SWORD", "AXE");
+        super(plugin, "strike", "Strike", "&a", Rarity.COMMON, "SWORD", "AXE");
 
         setDescription("&7Deals more damage", "&7the more health you are missing");
 

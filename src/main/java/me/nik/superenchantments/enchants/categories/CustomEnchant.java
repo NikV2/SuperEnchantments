@@ -1,6 +1,7 @@
 package me.nik.superenchantments.enchants.categories;
 
 import me.nik.superenchantments.SuperEnchantments;
+import me.nik.superenchantments.enums.Rarity;
 import me.nik.superenchantments.files.commentedfiles.CommentedFileConfiguration;
 import me.nik.superenchantments.utils.ChatUtils;
 import org.bukkit.Material;
@@ -31,18 +32,20 @@ public abstract class CustomEnchant implements Listener {
     private String displayName;
     private String plainName;
     private String loreLine;
+    private Rarity rarity;
     private List<String> description = Collections.emptyList();
     private List<String> appliesTo = Collections.emptyList();
     private Set<Material> materials = EnumSet.noneOf(Material.class);
     private List<Material> materialList = Collections.emptyList();
 
-    protected CustomEnchant(SuperEnchantments plugin, String id, String displayName, String loreColor, String... appliesTo) {
+    protected CustomEnchant(SuperEnchantments plugin, String id, String displayName, String loreColor, Rarity rarity, String... appliesTo) {
         this.plugin = plugin;
         this.id = id.toLowerCase(Locale.ROOT);
 
         addOption("enabled", true, "Should this enchant work?");
         addOption("display-name", displayName, "The name shown in the lore, it is also how the enchant is found on items");
         addOption("lore-color", loreColor, "The color of the lore line");
+        addOption("rarity", rarity.name(), "The rarity of this enchantment", "COMMON, RARE or LEGENDARY");
         addOption("applies-to", Arrays.asList(appliesTo), "The material suffixes this enchant can be applied to, or ALL");
         addOption("description", new ArrayList<String>(), "The description shown in the enchantments menu");
     }
@@ -109,6 +112,7 @@ public abstract class CustomEnchant implements Listener {
         displayName = getString("display-name");
         plainName = ChatUtils.plain(ChatUtils.format(displayName));
         loreLine = ChatUtils.format(getString("lore-color") + displayName);
+        rarity = Rarity.valueOf(getString("rarity").toUpperCase());
         appliesTo = getStringList("applies-to");
 
         List<String> lines = new ArrayList<>();
@@ -202,6 +206,10 @@ public abstract class CustomEnchant implements Listener {
 
     public String getPlainName() {
         return plainName;
+    }
+
+    public Rarity getRarity() {
+        return rarity;
     }
 
     public String getLoreLine() {

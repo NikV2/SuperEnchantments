@@ -2,6 +2,7 @@ package me.nik.superenchantments.enchants;
 
 import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.enchants.categories.ArmorEnchant;
+import me.nik.superenchantments.enums.Rarity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -24,7 +25,7 @@ public class JuggernautEnchant extends ArmorEnchant {
     private double maxKnockback;
 
     public JuggernautEnchant(SuperEnchantments plugin) {
-        super(plugin, "juggernaut", "Juggernaut", "&a");
+        super(plugin, "juggernaut", "Juggernaut", "&a", Rarity.RARE);
 
         setDescription("&7Reduces the knockback you take", "&7and some of the damage");
 

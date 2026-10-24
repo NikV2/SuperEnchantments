@@ -2,6 +2,7 @@ package me.nik.superenchantments.enchants;
 
 import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.enchants.categories.ArmorEnchant;
+import me.nik.superenchantments.enums.Rarity;
 import me.nik.superenchantments.utils.RandomUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,7 +26,7 @@ public class RegenerationEnchant extends ArmorEnchant {
     private long cooldownMillis;
 
     public RegenerationEnchant(SuperEnchantments plugin) {
-        super(plugin, "regeneration", "Regeneration", "&a");
+        super(plugin, "regeneration", "Regeneration", "&a", Rarity.LEGENDARY);
 
         setDescription("&7Taking damage has a chance to trigger", "&7a short burst of regeneration");
 

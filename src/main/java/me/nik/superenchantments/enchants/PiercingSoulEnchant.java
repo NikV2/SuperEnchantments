@@ -2,6 +2,7 @@ package me.nik.superenchantments.enchants;
 
 import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.enchants.categories.CustomEnchant;
+import me.nik.superenchantments.enums.Rarity;
 import me.nik.superenchantments.utils.MiscUtils;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Projectile;
@@ -19,7 +20,7 @@ public class PiercingSoulEnchant extends CustomEnchant {
     private double maxPenetration;
 
     public PiercingSoulEnchant(SuperEnchantments plugin) {
-        super(plugin, "piercingsoul", "Piercing Soul", "&a", "BOW", "CROSSBOW");
+        super(plugin, "piercingsoul", "Piercing Soul", "&a", Rarity.LEGENDARY, "BOW", "CROSSBOW");
 
         key = new NamespacedKey(plugin, "piercing_soul");
 

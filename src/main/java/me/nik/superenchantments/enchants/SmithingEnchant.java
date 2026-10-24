@@ -2,6 +2,7 @@ package me.nik.superenchantments.enchants;
 
 import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.enchants.categories.CustomEnchant;
+import me.nik.superenchantments.enums.Rarity;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -15,7 +16,7 @@ public class SmithingEnchant extends CustomEnchant {
     private int amount;
 
     public SmithingEnchant(SuperEnchantments plugin) {
-        super(plugin, "smithing", "Smithing", "&a", "HELMET", "CHESTPLATE", "LEGGINGS", "BOOTS", "SWORD", "AXE", "HOE", "PICKAXE", "SHOVEL", "SPEAR", "TRIDENT", "MACE", "ELYTRA", "SHIELD", "SHEARS", "FLINT_AND_STEEL", "FISHING_ROD");
+        super(plugin, "smithing", "Smithing", "&a", Rarity.LEGENDARY, "HELMET", "CHESTPLATE", "LEGGINGS", "BOOTS", "SWORD", "AXE", "HOE", "PICKAXE", "SHOVEL", "SPEAR", "TRIDENT", "MACE", "ELYTRA", "SHIELD", "SHEARS", "FLINT_AND_STEEL", "FISHING_ROD");
 
         setDescription("&7Slowly repairs your item every second");
 

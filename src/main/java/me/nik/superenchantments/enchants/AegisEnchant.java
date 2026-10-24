@@ -2,6 +2,7 @@ package me.nik.superenchantments.enchants;
 
 import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.enchants.categories.ArmorEnchant;
+import me.nik.superenchantments.enums.Rarity;
 import me.nik.superenchantments.utils.ChatUtils;
 import me.nik.superenchantments.utils.MiscUtils;
 import me.nik.superenchantments.utils.RandomUtils;
@@ -41,7 +42,7 @@ public class AegisEnchant extends ArmorEnchant {
     private Particle particle;
 
     public AegisEnchant(SuperEnchantments plugin) {
-        super(plugin, "aegis", "Aegis", "&a");
+        super(plugin, "aegis", "Aegis", "&a", Rarity.LEGENDARY);
 
         setDescription("&7A chance to surround you with a magical shield", "&7that absorbs the incoming damage");
 

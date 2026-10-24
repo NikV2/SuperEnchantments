@@ -81,6 +81,24 @@ public class Config {
                 "&6Applies to: &a%applicable%"
         ), "The lore of the custom enchantment book", "NOTE: The name of the enchantment will always show first", "Placeholders: %description%, %applicable%"),
 
+        RANDOM_ENCHANTMENT_BOOK("random_enchantment_book", "", "Random Enchantment Book Settings"),
+        RANDOM_ENCHANTMENT_BOOK_NAME("random_enchantment_book.name", "&#FF0000&lR&#FF1D00&la&#FF3A00&ln&#FF5700&ld&#FF7300&lo&#FF9000&lm&#FFAE00&l &#FFCB00&lE&#FFE800&ln&#F3FF00&lc&#B9FF00&lh&#80FF00&la&#46FF00&ln&#0CFF00&lt&#00D12E&lm&#009768&le&#005DA2&ln&#0023DC&lt&#0D00FB&l &#2F00F1&lB&#5100E7&lo&#7200DD&lo&#9400D3&lk", "The display name of the random enchantment book"),
+        RANDOM_ENCHANTMENT_BOOK_MATERIAL("random_enchantment_book.material", "BOOK", "The material to use for the random enchantment book"),
+        RANDOM_ENCHANTMENT_BOOK_GLOW("random_enchantment_book.glow", true, "Should the random enchantment book glow?"),
+        RANDOM_ENCHANTMENT_BOOK_LORE("random_enchantment_book.lore", Arrays.asList(
+                "",
+                "&6Right Click",
+                "&6To receive a random enchantment book!",
+                "",
+                "&2&nCommon:&f %common_chance%",
+                "&3&nRare:&f %rare_chance%",
+                "&5&nLegendary:&f %legendary_chance%",
+                ""
+        ), "The lore of the random enchantment book"),
+        RANDOM_ENCHANTMENT_BOOK_COMMON_CHANCE("random_enchantment_book.common_chance", 50.0, "The chance of the book giving a common rarity enchantment"),
+        RANDOM_ENCHANTMENT_BOOK_RARE_CHANCE("random_enchantment_book.rare_chance", 30.0, "The chance of the book giving a rare rarity enchantment"),
+        RANDOM_ENCHANTMENT_BOOK_LEGENDARY_CHANCE("random_enchantment_book.legendary_chance", 20.0, "The chance of the book giving a legendary rarity enchantment"),
+
         ANVIL("anvil", "", "Anvil Settings"),
         ANVIL_ENABLED("anvil.enabled", true, "Should players be able to apply enchant books to tools in an anvil?"),
         ANVIL_LIMIT("anvil.limit", 3, "The maximum limit of custom enchantments allowed in a single piece"),

@@ -2,6 +2,7 @@ package me.nik.superenchantments.enchants;
 
 import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.enchants.categories.CustomEnchant;
+import me.nik.superenchantments.enums.Rarity;
 import me.nik.superenchantments.utils.RandomUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -16,7 +17,7 @@ public class DodgeEnchant extends CustomEnchant {
     private double chance;
 
     public DodgeEnchant(SuperEnchantments plugin) {
-        super(plugin, "dodge", "Dodge", "&a", "HELMET", "CHESTPLATE", "LEGGINGS", "BOOTS");
+        super(plugin, "dodge", "Dodge", "&a", Rarity.RARE, "HELMET", "CHESTPLATE", "LEGGINGS", "BOOTS");
 
         setDescription("&7A chance to completely", "&7avoid the damage you take");
 

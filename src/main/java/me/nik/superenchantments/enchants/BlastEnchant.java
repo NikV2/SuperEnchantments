@@ -2,6 +2,7 @@ package me.nik.superenchantments.enchants;
 
 import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.enchants.categories.CustomEnchant;
+import me.nik.superenchantments.enums.Rarity;
 import me.nik.superenchantments.utils.MiscUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -51,7 +52,7 @@ public class BlastEnchant extends CustomEnchant {
     private Set<Material> blockedBlocks = EnumSet.noneOf(Material.class);
 
     public BlastEnchant(SuperEnchantments plugin) {
-        super(plugin, "blast", "Blast", "&a", "PICKAXE", "SHOVEL");
+        super(plugin, "blast", "Blast", "&a", Rarity.LEGENDARY, "PICKAXE", "SHOVEL");
 
         setDescription("&7Mines the blocks around the one you break", "&7and digs deeper the higher the radius is");
 

@@ -8,12 +8,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Container;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,8 +22,10 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -35,7 +35,6 @@ public class BlastEnchant extends CustomEnchant {
 
     private int radius;
     private boolean sneakDisables;
-    private boolean dropItems;
     private boolean dropXp;
     private boolean skipContainers;
     private boolean damageEnabled;
@@ -46,7 +45,6 @@ public class BlastEnchant extends CustomEnchant {
     private float soundPitch;
     private String sound;
     private Particle particle;
-    private Enchantment unbreaking;
     private Set<String> disabledWorlds = new HashSet<>();
     private Set<GameMode> disabledGameModes = EnumSet.noneOf(GameMode.class);
     private Set<Material> blockedBlocks = EnumSet.noneOf(Material.class);
@@ -60,7 +58,6 @@ public class BlastEnchant extends CustomEnchant {
         addOption("sneak_disables", true, "Holding sneak turns Blast off");
         addOption("disabled_worlds", new ArrayList<String>(), "Blast does not work in these worlds", "Example: [world_nether, creative]");
         addOption("disabled_gamemodes", Arrays.asList("CREATIVE", "SPECTATOR"), "Blast does not work in these gamemodes");
-        addOption("drop_items", true, "false = the extra blocks just vanish");
         addOption("drop_xp", true, "Drop experience from the extra blocks");
         addOption("skip_containers", true, "Never break chests, furnaces, hoppers and so on");
         addOption("blocked_blocks", Arrays.asList(
@@ -80,8 +77,8 @@ public class BlastEnchant extends CustomEnchant {
         addOption("tool_damage.respect-unbreaking", true, "Should the Unbreaking enchant reduce the damage?");
         addOption("effects.particle", "CLOUD", "NONE to disable", "Particle names depend on the server version");
         addOption("effects.particle_count", 5, "The amount of particles");
-        addOption("effects.sound", "entity.generic.explode", "NONE to disable", "Use the namespaced sound key");
-        addOption("effects.sound_volume", 0.2, "The volume of the sound");
+        addOption("effects.sound", "entity.generic.explode", "NONE to disable");
+        addOption("effects.sound_volume", 0.4, "The volume of the sound");
         addOption("effects.sound_pitch", 1.2, "The pitch of the sound");
     }
 
@@ -90,7 +87,6 @@ public class BlastEnchant extends CustomEnchant {
 
         radius = Math.max(1, getInt("radius"));
         sneakDisables = getBoolean("sneak_disables");
-        dropItems = getBoolean("drop_items");
         dropXp = getBoolean("drop_xp");
         skipContainers = getBoolean("skip_containers");
         damageEnabled = getBoolean("tool_damage.enabled");
@@ -99,8 +95,6 @@ public class BlastEnchant extends CustomEnchant {
         particleCount = Math.max(1, getInt("effects.particle_count"));
         soundVolume = (float) getDouble("effects.sound_volume");
         soundPitch = (float) getDouble("effects.sound_pitch");
-
-        unbreaking = Enchantment.getByKey(NamespacedKey.minecraft("unbreaking"));
 
         disabledWorlds = new HashSet<>(getStringList("disabled_worlds"));
 
@@ -166,6 +160,7 @@ public class BlastEnchant extends CustomEnchant {
         BlockFace miningDirection = getMiningDirection(player);
 
         TelepathyEnchant telepathy = TelepathyEnchant.get(plugin, tool);
+        AutoSmeltEnchant autoSmelt = AutoSmeltEnchant.get(plugin, tool);
 
         boolean brokeAny = false;
         boolean collected = false;
@@ -202,11 +197,33 @@ public class BlastEnchant extends CustomEnchant {
 
                         int exp = extra.getExpToDrop();
 
-                        if (dropItems && extra.isDropItems()) {
+                        if (extra.isDropItems()) {
 
-                            if (telepathy != null && (skipContainers || !(target.getState() instanceof Container))) {
+                            boolean smelt = autoSmelt != null && autoSmelt.applies(target.getType(), tool);
 
-                                collected |= telepathy.collect(player, target.getDrops(tool, player), target.getLocation().add(0.5, 0.5, 0.5));
+                            if ((telepathy != null || smelt) && (skipContainers || !(target.getState() instanceof Container))) {
+
+                                Collection<ItemStack> drops = target.getDrops(tool, player);
+
+                                if (smelt) {
+
+                                    List<ItemStack> smelted = new ArrayList<>();
+
+                                    for (ItemStack drop : drops) smelted.add(autoSmelt.smelt(player, drop));
+
+                                    drops = smelted;
+                                }
+
+                                Location location = target.getLocation().add(0.5, 0.5, 0.5);
+
+                                if (telepathy != null) {
+
+                                    collected |= telepathy.collect(player, drops, location);
+
+                                } else {
+
+                                    for (ItemStack drop : drops) target.getWorld().dropItemNaturally(location, drop);
+                                }
 
                                 MiscUtils.playBreakEffect(target);
 

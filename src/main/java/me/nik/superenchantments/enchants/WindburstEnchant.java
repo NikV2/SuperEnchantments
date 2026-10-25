@@ -40,7 +40,7 @@ public class WindburstEnchant extends CustomEnchant {
     private Particle particle;
 
     public WindburstEnchant(SuperEnchantments plugin) {
-        super(plugin, "windburst", "Windburst", "&a", Rarity.RARE, "SWORD", "AXE", "BOW", "CROSSBOW");
+        super(plugin, "windburst", "Windburst", "&a", Rarity.RARE, "SWORD", "AXE", "BOW", "CROSSBOW", "SPEAR", "TRIDENT");
 
         key = new NamespacedKey(plugin, "windburst");
 

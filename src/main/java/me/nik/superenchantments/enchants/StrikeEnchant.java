@@ -15,7 +15,7 @@ public class StrikeEnchant extends CustomEnchant {
     private double multiplier;
 
     public StrikeEnchant(SuperEnchantments plugin) {
-        super(plugin, "strike", "Strike", "&a", Rarity.COMMON, "SWORD", "AXE");
+        super(plugin, "strike", "Strike", "&a", Rarity.COMMON, "SWORD", "AXE", "TRIDENT", "SPEAR");
 
         setDescription("&7Deals more damage", "&7the more health you are missing");
 

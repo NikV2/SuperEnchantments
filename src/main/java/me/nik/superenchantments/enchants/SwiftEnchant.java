@@ -1,13 +1,13 @@
 package me.nik.superenchantments.enchants;
 
 import me.nik.superenchantments.SuperEnchantments;
-import me.nik.superenchantments.enchants.categories.ArmorEffectEnchant;
+import me.nik.superenchantments.enchants.categories.EffectEnchant;
 import me.nik.superenchantments.enums.Rarity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
-public class SwiftEnchant extends ArmorEffectEnchant {
+public class SwiftEnchant extends EffectEnchant {
 
     private int amplifier;
 

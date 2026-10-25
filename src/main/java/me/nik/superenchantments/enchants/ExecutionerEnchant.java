@@ -18,7 +18,7 @@ public class ExecutionerEnchant extends CustomEnchant {
     private double bonus;
 
     public ExecutionerEnchant(SuperEnchantments plugin) {
-        super(plugin, "executioner", "Executioner", "&a", Rarity.COMMON, "SWORD", "AXE");
+        super(plugin, "executioner", "Executioner", "&a", Rarity.COMMON, "SWORD", "AXE", "TRIDENT", "SPEAR");
 
         setDescription("&7Deals bonus damage to targets", "&7that are low on health");
 

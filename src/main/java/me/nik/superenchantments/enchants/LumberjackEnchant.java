@@ -38,7 +38,6 @@ public class LumberjackEnchant extends CustomEnchant {
     private int maxDistance;
     private boolean naturalOnly;
     private boolean sneakDisables;
-    private boolean dropItems;
     private boolean damageEnabled;
     private int perBlock;
     private boolean respectUnbreaking;
@@ -56,7 +55,6 @@ public class LumberjackEnchant extends CustomEnchant {
         addOption("sneak_disables", true, "Holding sneak turns Lumberjack off");
         addOption("disabled_worlds", new ArrayList<String>(), "Lumberjack does not work in these worlds", "Example: [world_nether, creative]");
         addOption("disabled_gamemodes", Arrays.asList("CREATIVE", "SPECTATOR"), "Lumberjack does not work in these gamemodes");
-        addOption("drop_items", true, "false = the extra logs just vanish");
         addOption("tool_damage.enabled", true, "Should the extra logs wear the tool down?", "Lumberjack stops when the tool is nearly broken so the vanilla break happens on the log you actually mined");
         addOption("tool_damage.per-block", 1, "Durability lost per extra log");
         addOption("tool_damage.respect-unbreaking", true, "Should the Unbreaking enchant reduce the damage?");
@@ -69,7 +67,6 @@ public class LumberjackEnchant extends CustomEnchant {
         maxDistance = Math.max(1, getInt("max_distance"));
         naturalOnly = getBoolean("natural_trees_only");
         sneakDisables = getBoolean("sneak_disables");
-        dropItems = getBoolean("drop_items");
         damageEnabled = getBoolean("tool_damage.enabled");
         perBlock = Math.max(0, getInt("tool_damage.per-block"));
         respectUnbreaking = getBoolean("tool_damage.respect-unbreaking");
@@ -140,7 +137,7 @@ public class LumberjackEnchant extends CustomEnchant {
                     if (!MiscUtils.damageTool(tool, perBlock, respectUnbreaking)) break;
                 }
 
-                if (dropItems && extra.isDropItems()) {
+                if (extra.isDropItems()) {
 
                     if (telepathy != null) {
 

@@ -20,13 +20,13 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public abstract class ArmorEffectEnchant extends CustomEnchant {
+public abstract class EffectEnchant extends CustomEnchant {
 
     private final Set<UUID> managedPlayers = new HashSet<>();
 
     private final PotionEffectType effect;
 
-    protected ArmorEffectEnchant(SuperEnchantments plugin, String id, String displayName, String loreColor, Rarity rarity, PotionEffectType effect, String... appliesTo) {
+    protected EffectEnchant(SuperEnchantments plugin, String id, String displayName, String loreColor, Rarity rarity, PotionEffectType effect, String... appliesTo) {
         super(plugin, id, displayName, loreColor, rarity, appliesTo);
         this.effect = effect;
 
@@ -39,7 +39,7 @@ public abstract class ArmorEffectEnchant extends CustomEnchant {
         return 0;
     }
 
-    private boolean isWearing(Player player) {
+    private boolean hasItem(Player player) {
 
         if (!isEnabled()) return false;
 
@@ -54,7 +54,7 @@ public abstract class ArmorEffectEnchant extends CustomEnchant {
 
         UUID uuid = player.getUniqueId();
 
-        if (!isWearing(player)) {
+        if (!hasItem(player)) {
             removeEffect(player);
             return;
         }

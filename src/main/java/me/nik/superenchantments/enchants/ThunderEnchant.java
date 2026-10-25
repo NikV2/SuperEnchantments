@@ -24,7 +24,7 @@ public class ThunderEnchant extends CustomEnchant {
     private double radius;
 
     public ThunderEnchant(SuperEnchantments plugin) {
-        super(plugin, "thunder", "Thunder", "&a", Rarity.LEGENDARY, "SWORD", "AXE");
+        super(plugin, "thunder", "Thunder", "&a", Rarity.LEGENDARY, "SWORD", "AXE", "SPEAR", "TRIDENT");
 
         setDescription("&7A chance to call lightning on your target", "&7and shock everything around it");
 

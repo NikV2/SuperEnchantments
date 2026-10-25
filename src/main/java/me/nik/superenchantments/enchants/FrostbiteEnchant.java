@@ -32,7 +32,7 @@ public class FrostbiteEnchant extends CustomEnchant {
     private PotionEffectType slowness;
 
     public FrostbiteEnchant(SuperEnchantments plugin) {
-        super(plugin, "frostbite", "Frostbite", "&a", Rarity.COMMON, "SWORD", "AXE", "BOW", "CROSSBOW");
+        super(plugin, "frostbite", "Frostbite", "&a", Rarity.COMMON, "SWORD", "AXE", "BOW", "CROSSBOW", "SPEAR", "TRIDENT");
 
         key = new NamespacedKey(plugin, "frostbite");
 

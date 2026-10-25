@@ -44,7 +44,7 @@ public class ChargeEnchant extends CustomEnchant {
     private Particle particle;
 
     public ChargeEnchant(SuperEnchantments plugin) {
-        super(plugin, "charge", "Charge", "&a", Rarity.RARE, "SWORD", "AXE");
+        super(plugin, "charge", "Charge", "&a", Rarity.RARE, "SWORD", "AXE", "TRIDENT");
 
         setDescription("&7Consecutive hits build up rage", "&7and the next hit after a full charge", "&7releases a powerful blast");
 

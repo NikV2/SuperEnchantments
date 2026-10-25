@@ -2,6 +2,7 @@ package me.nik.superenchantments;
 
 import me.nik.superenchantments.commands.CommandManager;
 import me.nik.superenchantments.enchants.AegisEnchant;
+import me.nik.superenchantments.enchants.AutoSmeltEnchant;
 import me.nik.superenchantments.enchants.BlastEnchant;
 import me.nik.superenchantments.enchants.ChargeEnchant;
 import me.nik.superenchantments.enchants.CurseEnchant;
@@ -9,14 +10,18 @@ import me.nik.superenchantments.enchants.DodgeEnchant;
 import me.nik.superenchantments.enchants.ExecutionerEnchant;
 import me.nik.superenchantments.enchants.FrostbiteEnchant;
 import me.nik.superenchantments.enchants.GlowEnchant;
+import me.nik.superenchantments.enchants.HarvesterEnchant;
+import me.nik.superenchantments.enchants.HasteEnchant;
 import me.nik.superenchantments.enchants.JuggernautEnchant;
 import me.nik.superenchantments.enchants.LifestealEnchant;
 import me.nik.superenchantments.enchants.LumberjackEnchant;
 import me.nik.superenchantments.enchants.PenetrationEnchant;
 import me.nik.superenchantments.enchants.PiercingSoulEnchant;
+import me.nik.superenchantments.enchants.PlanterEnchant;
 import me.nik.superenchantments.enchants.RegenerationEnchant;
 import me.nik.superenchantments.enchants.RejuvenationEnchant;
 import me.nik.superenchantments.enchants.SmithingEnchant;
+import me.nik.superenchantments.enchants.SniperEnchant;
 import me.nik.superenchantments.enchants.StrikeEnchant;
 import me.nik.superenchantments.enchants.SwiftEnchant;
 import me.nik.superenchantments.enchants.TelepathyEnchant;
@@ -92,6 +97,10 @@ public class SuperEnchantments extends JavaPlugin {
                 new StrikeEnchant(this),
                 new SmithingEnchant(this),
                 new ThunderEnchant(this),
+                new AutoSmeltEnchant(this),
+                new HarvesterEnchant(this),
+                new PlanterEnchant(this),
+                new SniperEnchant(this),
                 new RejuvenationEnchant(this),
                 new TelepathyEnchant(this),
                 new LumberjackEnchant(this),
@@ -99,6 +108,7 @@ public class SuperEnchantments extends JavaPlugin {
                 new ChargeEnchant(this),
                 new ExecutionerEnchant(this),
                 new FrostbiteEnchant(this),
+                new HasteEnchant(this),
                 new JuggernautEnchant(this),
                 new PenetrationEnchant(this),
                 new PiercingSoulEnchant(this),

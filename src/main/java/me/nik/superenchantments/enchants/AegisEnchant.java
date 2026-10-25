@@ -55,7 +55,7 @@ public class AegisEnchant extends ArmorEnchant {
         addOption("expire_message", "&7Your Aegis shield faded", "Shown when the shield runs out of time", "Leave it empty to disable");
         addOption("particle", "END_ROD", "NONE to disable", "Particle names depend on the server version");
         addOption("particle_count", 20, "The amount of particles");
-        addOption("sound", "block.enchantment_table.use", "NONE to disable", "Use the namespaced sound key");
+        addOption("sound", "block.enchantment_table.use", "NONE to disable");
         addOption("break_sound", "item.shield.break", "NONE to disable", "Played when the shield ends");
         addOption("sound_volume", 0.6D, "The volume of the sounds");
 

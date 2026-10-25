@@ -15,7 +15,7 @@ public class HasteEnchant extends EffectEnchant {
 
         setDescription("&7Gives you haste", "&7while holding the item");
 
-        addOption("amplifier", 2, "The effect amplifier");
+        addOption("amplifier", 1, "The effect amplifier");
     }
 
     @Override

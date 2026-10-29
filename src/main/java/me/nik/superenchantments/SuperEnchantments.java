@@ -26,6 +26,7 @@ import me.nik.superenchantments.enchants.StrikeEnchant;
 import me.nik.superenchantments.enchants.SwiftEnchant;
 import me.nik.superenchantments.enchants.TelepathyEnchant;
 import me.nik.superenchantments.enchants.ThunderEnchant;
+import me.nik.superenchantments.enchants.VenomEnchant;
 import me.nik.superenchantments.enchants.WindburstEnchant;
 import me.nik.superenchantments.files.Config;
 import me.nik.superenchantments.files.Enchantments;
@@ -94,6 +95,7 @@ public class SuperEnchantments extends JavaPlugin {
                 new SwiftEnchant(this),
                 new DodgeEnchant(this),
                 new LifestealEnchant(this),
+                new VenomEnchant(this),
                 new StrikeEnchant(this),
                 new SmithingEnchant(this),
                 new ThunderEnchant(this),

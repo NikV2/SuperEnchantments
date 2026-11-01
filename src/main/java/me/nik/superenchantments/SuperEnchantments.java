@@ -36,6 +36,7 @@ import me.nik.superenchantments.listeners.GuiListener;
 import me.nik.superenchantments.listeners.RandomEnchantBookListener;
 import me.nik.superenchantments.managers.EnchantManager;
 import me.nik.superenchantments.managers.EnchanterManager;
+import me.nik.superenchantments.metrics.Metrics;
 import me.nik.superenchantments.tasks.UpdateTask;
 import me.nik.superenchantments.utils.ChatUtils;
 import me.nik.superenchantments.utils.MillisTest;
@@ -137,6 +138,14 @@ public class SuperEnchantments extends JavaPlugin {
                 new RandomEnchantBookListener(this)
         ).forEach(listener -> Bukkit.getPluginManager().registerEvents(listener, this));
         ChatUtils.log("Listeners have been loaded in " + test.getMillis() + "ms");
+
+        //Metrics
+        new Metrics(this, 35064);
+
+        //Check for updates
+        if (Config.Setting.CHECK_UPDATES.getBoolean()) {
+            new UpdateChecker(this).runTaskAsynchronously(this);
+        }
     }
 
     @Override

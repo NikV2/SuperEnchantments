@@ -69,6 +69,7 @@ public class Config {
     }
 
     public enum Setting {
+        CHECK_UPDATES("check_updates", true, "Should we check for updates on startup?"),
 
         BOOKS("books", "", "Enchant Book Settings"),
         BOOKS_NAME("books.name", "&bEnchanted Book", "The display name of the custom enchantment books"),

@@ -210,7 +210,7 @@ public class LumberjackEnchant extends CustomEnchant {
             }
         }
 
-        return natural ? logs : Collections.<Block>emptyList();
+        return natural ? logs : Collections.emptyList();
     }
 
     private boolean hasNaturalLeaves(Block block) {

@@ -2,7 +2,6 @@ package me.nik.superenchantments.listeners;
 
 import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.enchants.categories.CustomEnchant;
-import me.nik.superenchantments.utils.MillisTest;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

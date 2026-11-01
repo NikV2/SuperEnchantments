@@ -53,9 +53,12 @@ public class AnvilListener implements Listener {
 
         for (CustomEnchant enchant : onBook) {
 
-            if (!enchant.isEnabled() || !enchant.appliesTo(left.getType())) continue;
+            if (!enchant.isEnabled() || !enchant.appliesTo(left.getType()) || manager.has(result, enchant)) continue;
 
-            if (manager.has(result, enchant)) continue;
+            if (manager.has(left, enchant)) {
+                e.setResult(null);
+                return;
+            }
 
             result = manager.apply(result, enchant);
 

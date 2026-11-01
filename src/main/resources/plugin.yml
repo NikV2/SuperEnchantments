@@ -8,7 +8,7 @@ description: ${project.description}
 commands:
   superenchantments:
     description: The main superenchantments command.
-    aliases: [ se, senchants, enchants ]
+    aliases: [ se, senchants, enchants, ce ]
 permissions:
   superenchantments.admin:
     description: Use the /superenchantments command.

@@ -14,6 +14,8 @@ public enum MsgType {
     HOLD_ITEM(PREFIX.getMessage() + ChatUtils.format(SuperEnchantments.getInstance().getLang().get().getString("hold_item"))),
     CANNOT_APPLY(PREFIX.getMessage() + ChatUtils.format(SuperEnchantments.getInstance().getLang().get().getString("cannot_apply"))),
     APPLIED(PREFIX.getMessage() + ChatUtils.format(SuperEnchantments.getInstance().getLang().get().getString("applied"))),
+    UPDATE_FOUND(PREFIX.getMessage() + ChatUtils.format(SuperEnchantments.getInstance().getLang().get().getString("update_found"))),
+    UPDATE_NOT_FOUND(PREFIX.getMessage() + ChatUtils.format(SuperEnchantments.getInstance().getLang().get().getString("update_not_found"))),
     REMOVED(PREFIX.getMessage() + ChatUtils.format(SuperEnchantments.getInstance().getLang().get().getString("removed"))),
     NOT_PRESENT(PREFIX.getMessage() + ChatUtils.format(SuperEnchantments.getInstance().getLang().get().getString("not_present"))),
     BOOK_GIVEN(PREFIX.getMessage() + ChatUtils.format(SuperEnchantments.getInstance().getLang().get().getString("book_given"))),

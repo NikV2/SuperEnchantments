@@ -13,14 +13,32 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DisenchanterGUI extends PaginatedMenu {
 
+    private static final int[] SLOTS = {
+            10, 11, 12, 13, 14, 15, 16,
+            19, 20, 21, 22, 23, 24, 25,
+            28, 29, 30, 31, 32, 33, 34,
+            37, 38, 39, 40, 41, 42, 43
+    };
+
+    private static final int PREVIEW = 4;
+    private static final int PREVIOUS = 45;
+    private static final int INFO = 47;
+    private static final int CLOSE = 49;
+    private static final int NEXT = 53;
+
+    private List<CustomEnchant> shown = new ArrayList<>();
+
     public DisenchanterGUI(PlayerMenu playerMenu, SuperEnchantments plugin) {
         super(playerMenu, plugin);
+        this.maxItemsPerPage = SLOTS.length;
     }
 
     @Override
@@ -38,37 +56,44 @@ public class DisenchanterGUI extends PaginatedMenu {
 
         Player p = (Player) e.getWhoClicked();
 
-        switch (e.getSlot()) {
-            case 48:
-                if (page != 0) {
-                    page = page - 1;
-                    open();
-                }
-                return;
-            case 49:
-                p.closeInventory();
-                return;
-            case 50:
-                if ((page + 1) * maxItemsPerPage < plugin.getEnchantManager().getEnchantsOn(p.getInventory().getItemInMainHand()).size()) {
-                    page = page + 1;
-                    open();
-                }
-                return;
-            default:
-                break;
+        int slot = e.getSlot();
+
+        if (slot == CLOSE) {
+            p.closeInventory();
+            return;
         }
 
-        ItemStack item = e.getCurrentItem();
+        if (slot == PREVIOUS) {
 
-        if (!item.hasItemMeta() || !item.getItemMeta().hasLore()) return;
+            if (page > 0) {
+                page = page - 1;
+                open();
+            }
 
-        List<String> lore = item.getItemMeta().getLore();
+            return;
+        }
 
-        CustomEnchant enchant = plugin.getEnchantManager().get(ChatUtils.stripColorCodes(lore.get(lore.size() - 1)).replace("ID:", "").trim());
+        if (slot == NEXT) {
 
-        if (enchant == null) return;
+            if ((page + 1) * maxItemsPerPage < getEnchants(p).size()) {
+                page = page + 1;
+                open();
+            }
 
-        remove(p, enchant);
+            return;
+        }
+
+        for (int i = 0; i < SLOTS.length && i < shown.size(); i++) {
+
+            if (SLOTS[i] == slot) {
+                remove(p, shown.get(i));
+                return;
+            }
+        }
+    }
+
+    private List<CustomEnchant> getEnchants(Player player) {
+        return plugin.getEnchantManager().getEnchantsOn(player.getInventory().getItemInMainHand());
     }
 
     private void remove(Player p, CustomEnchant enchant) {
@@ -130,39 +155,124 @@ public class DisenchanterGUI extends PaginatedMenu {
     @Override
     protected void setMenuItems() {
 
-        addMenuBorder();
+        Player player = playerMenu.getOwner();
 
-        ItemStack item = playerMenu.getOwner().getInventory().getItemInMainHand();
+        ItemStack held = player.getInventory().getItemInMainHand();
 
-        if (item.getType() == plugin.getEnchantManager().getBookMaterial()) return;
+        List<CustomEnchant> enchants = getEnchants(player);
 
-        List<CustomEnchant> enchants = plugin.getEnchantManager().getEnchantsOn(item);
+        int pages = Math.max(1, (enchants.size() + maxItemsPerPage - 1) / maxItemsPerPage);
+
+        if (page >= pages) page = pages - 1;
 
         boolean levels = ExpUtils.isLevels(Config.Setting.DISENCHANTER_COST_TYPE.getString());
 
         int cost = Math.max(0, Config.Setting.DISENCHANTER_COST.getInt());
 
-        for (int i = 0; i < super.maxItemsPerPage; i++) {
+        String type = levels ? "levels" : "points";
 
-            index = super.maxItemsPerPage * page + i;
+        drawFrame();
+
+        inventory.setItem(PREVIEW, preview(held, enchants.size()));
+
+        shown = new ArrayList<>();
+
+        for (int i = 0; i < maxItemsPerPage; i++) {
+
+            index = maxItemsPerPage * page + i;
 
             if (index >= enchants.size()) break;
 
             CustomEnchant enchant = enchants.get(index);
 
+            shown.add(enchant);
+
             List<String> lore = new ArrayList<>(enchant.getDescription());
 
             if (!lore.isEmpty()) lore.add("");
 
-            if (cost > 0) lore.add("&9Cost: &b" + cost + " " + (levels ? "levels" : "points"));
-
-            lore.add("&b&lClick &7to remove it and get the book back");
+            lore.add("&9Applies to: &b" + MiscUtils.describeTypes(enchant.getAppliesTo()));
+            lore.add("&9Removal cost: " + (cost > 0 ? "&b" + cost + " " + type : "&aFree"));
             lore.add("");
-            lore.add("&8ID: " + enchant.getId());
+            lore.add("&e&lClick &7to remove it from the item");
+            lore.add("&7and get the book back");
 
-            ItemStack itemStack = MiscUtils.makeItem(item.getType(), enchant.getLoreLine(), lore);
-
-            inventory.addItem(itemStack);
+            inventory.setItem(SLOTS[i], MiscUtils.makeItem(MiscUtils.getIcon(enchant.getAppliesTo()), enchant.getLoreLine(), lore));
         }
+
+        if (enchants.isEmpty()) {
+
+            inventory.setItem(22, MiscUtils.makeItem(Material.BARRIER, "&cNothing to remove", Arrays.asList(
+                    "&7Hold a single item that has",
+                    "&7custom enchants and open this again"
+            )));
+        }
+
+        int balance = levels ? player.getLevel() : ExpUtils.getTotal(player);
+
+        inventory.setItem(INFO, MiscUtils.makeItem(Material.EXPERIENCE_BOTTLE, "&aExperience", Arrays.asList(
+                "&7Removal cost: " + (cost > 0 ? "&f" + cost + " " + type : "&aFree"),
+                "&7You have: &f" + balance + " " + type
+        )));
+
+        inventory.setItem(CLOSE, MiscUtils.makeItem(Material.BARRIER, "&cClose", null));
+
+        if (page > 0) {
+            inventory.setItem(PREVIOUS, MiscUtils.makeItem(Material.ARROW, "&ePrevious Page", Arrays.asList("&7Page &f" + page + "&7/&f" + pages)));
+        }
+
+        if (page + 1 < pages) {
+            inventory.setItem(NEXT, MiscUtils.makeItem(Material.ARROW, "&eNext Page", Arrays.asList("&7Page &f" + (page + 2) + "&7/&f" + pages)));
+        }
+    }
+
+    private void drawFrame() {
+
+        Material border = material(Config.Setting.DISENCHANTER_BORDER.getString(), Material.BLACK_STAINED_GLASS_PANE);
+        Material filler = material(Config.Setting.DISENCHANTER_FILLER.getString(), Material.GRAY_STAINED_GLASS_PANE);
+
+        ItemStack borderItem = border == null ? null : MiscUtils.makeItem(border, " ", null);
+        ItemStack fillerItem = filler == null ? null : MiscUtils.makeItem(filler, " ", null);
+
+        for (int i = 0; i < getSlots(); i++) {
+
+            boolean edge = i < 9 || i >= 45 || i % 9 == 0 || i % 9 == 8;
+
+            inventory.setItem(i, edge ? borderItem : fillerItem);
+        }
+    }
+
+    private ItemStack preview(ItemStack held, int amount) {
+
+        if (held.getType() == Material.AIR) {
+            return MiscUtils.makeItem(Material.BARRIER, "&cNo item in your hand", Arrays.asList("&7Hold the item you want to remove enchants from"));
+        }
+
+        ItemStack item = held.clone();
+
+        item.setAmount(1);
+
+        ItemMeta meta = item.getItemMeta();
+
+        List<String> lore = meta != null && meta.hasLore() ? new ArrayList<>(meta.getLore()) : new ArrayList<String>();
+
+        lore.add("");
+        lore.add(ChatUtils.format("&7Custom enchants: &f" + amount));
+
+        if (meta != null) {
+            meta.setLore(lore);
+            item.setItemMeta(meta);
+        }
+
+        return item;
+    }
+
+    private Material material(String name, Material fallback) {
+
+        if (name.equalsIgnoreCase("NONE")) return null;
+
+        Material material = Material.matchMaterial(name);
+
+        return material == null || material.isAir() || !material.isItem() ? fallback : material;
     }
 }

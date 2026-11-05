@@ -117,6 +117,8 @@ public class Config {
         DISENCHANTER("disenchanter", "", "Disenchanter Settings", "Players remove a custom enchant from the item in their hand and get its book back"),
         DISENCHANTER_ENABLED("disenchanter.enabled", true, "Should the disenchanter menu and its command work?"),
         DISENCHANTER_TITLE("disenchanter.title", "&9Remove Enchantments", "The title of the menu"),
+        DISENCHANTER_BORDER("disenchanter.border", "BLACK_STAINED_GLASS_PANE", "The item of the border of the menu", "NONE to leave it empty"),
+        DISENCHANTER_FILLER("disenchanter.filler", "GRAY_STAINED_GLASS_PANE", "The item that fills the empty slots of the menu", "NONE to leave them empty"),
         DISENCHANTER_COST("disenchanter.cost", 0, "What removing an enchant costs", "0 is free"),
         DISENCHANTER_COST_TYPE("disenchanter.cost_type", "LEVELS", "LEVELS or POINTS (experience points)"),
         DISENCHANTER_SUCCESS_SOUND("disenchanter.success_sound", "block.anvil.use", "NONE to disable", "Played when an enchant is removed"),

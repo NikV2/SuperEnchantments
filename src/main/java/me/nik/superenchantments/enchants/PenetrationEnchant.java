@@ -18,6 +18,7 @@ public class PenetrationEnchant extends CustomEnchant {
 
     private double chance;
     private double extraDamage;
+    private double minCharge;
     private double armorIgnore;
     private int particleCount;
     private Particle particle;
@@ -28,8 +29,9 @@ public class PenetrationEnchant extends CustomEnchant {
         setDescription("&7A chance to deal extra damage", "&7that ignores part of the target's armor");
 
         addOption("chance", 20.0D, "The chance of the enchant applying");
-        addOption("extra_damage", 3.0D, "The extra damage dealt when the enchant applies");
+        addOption("extra_damage", 2.0D, "The extra damage dealt when the enchant applies");
         addOption("armor_ignore", 30.0D, "The percent of the armor and other damage reduction that gets ignored", "100 ignores all of it");
+        addOption("min_charge", 90.0D, "The percent of the attack charge that is needed for the enchant to apply", "100 means only fully charged hits, 0 disables the check");
         addOption("particle", "CRIT", "NONE to disable", "Particle names depend on the server version");
         addOption("particle_count", 15, "The amount of particles");
     }
@@ -40,6 +42,7 @@ public class PenetrationEnchant extends CustomEnchant {
         extraDamage = getDouble("extra_damage");
         armorIgnore = Math.max(0.0D, Math.min(100.0D, getDouble("armor_ignore"))) / 100.0D;
         particleCount = Math.max(1, getInt("particle_count"));
+        minCharge = Math.max(0.0D, Math.min(100.0D, getDouble("min_charge"))) / 100.0D;
         particle = MiscUtils.getParticle(getString("particle"));
     }
 
@@ -54,7 +57,7 @@ public class PenetrationEnchant extends CustomEnchant {
 
         ItemStack tool = player.getInventory().getItemInMainHand();
 
-        if (!appliesTo(tool.getType()) || !hasEnchant(tool)) return;
+        if (!appliesTo(tool.getType()) || !hasEnchant(tool) || MiscUtils.getAttackCharge(player) < minCharge) return;
 
         if (!RandomUtils.chance(chance)) return;
 

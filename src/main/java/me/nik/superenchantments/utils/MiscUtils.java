@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,38 @@ public final class MiscUtils {
     public static final Enchantment UNBREAKING = Enchantment.getByName("DURABILITY") != null
             ? Enchantment.getByName("DURABILITY")
             : Enchantment.getByName("UNBREAKING");
+
+    private static final Method ATTACK_COOLDOWN = findAttackCooldown();
+
+    private static Method findAttackCooldown() {
+
+        try {
+            return Player.class.getMethod("getAttackCooldown");
+        } catch (NoSuchMethodException ignored) {
+        }
+
+        try {
+            return Player.class.getMethod("getCooledAttackStrength", float.class);
+        } catch (NoSuchMethodException ignored) {
+        }
+
+        return null;
+    }
+
+    public static float getAttackCharge(Player player) {
+
+        if (ATTACK_COOLDOWN == null) return 1.0F;
+
+        try {
+
+            Object value = ATTACK_COOLDOWN.getParameterTypes().length == 0 ? ATTACK_COOLDOWN.invoke(player) : ATTACK_COOLDOWN.invoke(player, 0.0F);
+
+            return ((Number) value).floatValue();
+
+        } catch (ReflectiveOperationException e) {
+            return 1.0F;
+        }
+    }
 
     public static YamlConfiguration loadConfigurationUTF_8(final File file) {
 

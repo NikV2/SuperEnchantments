@@ -3,6 +3,7 @@ package me.nik.superenchantments.enchants;
 import me.nik.superenchantments.SuperEnchantments;
 import me.nik.superenchantments.enchants.categories.CustomEnchant;
 import me.nik.superenchantments.enums.Rarity;
+import me.nik.superenchantments.utils.MiscUtils;
 import me.nik.superenchantments.utils.RandomUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
@@ -22,6 +23,7 @@ public class ThunderEnchant extends CustomEnchant {
     private double chance;
     private double damage;
     private double radius;
+    private double minCharge;
 
     public ThunderEnchant(SuperEnchantments plugin) {
         super(plugin, "thunder", "Thunder", "&a", Rarity.LEGENDARY, "SWORD", "AXE", "SPEAR", "TRIDENT");
@@ -31,6 +33,7 @@ public class ThunderEnchant extends CustomEnchant {
         addOption("chance", 20.0D, "The chance of the enchant applying");
         addOption("damage", 4.0D, "The bonus damage dealt to the target and everything around it");
         addOption("radius", 3.0D, "The radius around the target that gets shocked");
+        addOption("min_charge", 90.0D, "The percent of the attack charge that is needed for the enchant to apply", "100 means only fully charged hits, 0 disables the check");
         addOption("damage_players", true, "Should players take the bonus damage?");
     }
 
@@ -39,6 +42,7 @@ public class ThunderEnchant extends CustomEnchant {
         chance = getDouble("chance");
         damage = getDouble("damage");
         radius = getDouble("radius");
+        minCharge = Math.max(0.0D, Math.min(100.0D, getDouble("min_charge"))) / 100.0D;
         damagePlayers = getBoolean("damage_players");
     }
 
@@ -53,7 +57,7 @@ public class ThunderEnchant extends CustomEnchant {
 
         ItemStack tool = player.getInventory().getItemInMainHand();
 
-        if (!appliesTo(tool.getType()) || !hasEnchant(tool)) return;
+        if (!appliesTo(tool.getType()) || !hasEnchant(tool) || MiscUtils.getAttackCharge(player) < minCharge) return;
 
         if (!RandomUtils.chance(chance)) return;
 

@@ -170,7 +170,7 @@ public class BlastEnchant extends CustomEnchant {
         try {
 
             outer:
-            for (int depth = 0; depth <= radius; depth++) {
+            for (int depth = 0; depth < radius; depth++) {
 
                 for (int x = -1; x <= 1; x++) {
 
